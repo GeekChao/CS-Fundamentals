@@ -137,7 +137,7 @@ class Fraction {
     f3.changeNumerator(7);
     System.out.println("Now f3 is " + f3 + ", which should be 7/20");
     System.out.println("The total number of Fraction objects is " +
-                       fracs());
+                       Fraction.fracs());
 
     /* Test gcd function (static method). */
     System.out.println("\nTesting gcd:");

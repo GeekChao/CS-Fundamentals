@@ -18,5 +18,9 @@ public class UseHuman {
 		System.out.println("IMPORTANT: YOU CANNOT CHANGE THE VALUE OF \"this\"!");
 		System.out.println("IMPORTANT: in \"static\" method, THERE IS NO \"this\"!");
 
+		Human[] array = new Human[]{new Human(), new Human("chao")};
+		System.out.println(array[0].name);
+		System.out.println(array[1].name);
+
 	}
 }
