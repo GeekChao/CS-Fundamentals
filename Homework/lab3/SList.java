@@ -11,6 +11,7 @@
 public class SList {
 
   private SListNode head;
+  private SListNode tail;
   private int size;
 
   /**
@@ -20,6 +21,7 @@ public class SList {
   public SList() {
     size = 0;
     head = null;
+    tail = null;
   }
 
   /**
@@ -46,7 +48,12 @@ public class SList {
    **/
 
   public void insertFront(Object obj) {
-    head = new SListNode(obj, head);
+    if(head == null){
+      head = new SListNode(obj);
+      tail = head;
+    }else{
+      head = new SListNode(obj, head);
+    }
     size++;
   }
 
@@ -58,12 +65,11 @@ public class SList {
   public void insertEnd(Object obj) {
     if (head == null) {
       head = new SListNode(obj);
+      tail = head;
     } else {
-      SListNode node = head;
-      while (node.next != null) {
-        node = node.next;
-      }
-      node.next = new SListNode(obj);
+     SListNode node = new SListNode(obj, null);
+     tail.next = node;
+     tail = node;
     }
     size++;
   }
@@ -128,6 +134,14 @@ public class SList {
     testEmpty();
     testAfterInsertFront();
     testAfterInsertEnd();
+
+  /*Part I Using SLists*/
+    SList list = new SList();
+    int[] array = new int[]{3, 6, 9, 12, 15};
+    for(int i = array.length - 1; i >= 0 ; i--){
+      list.insertFront(new Integer(array[i]));
+    }
+    System.out.println("PartI:" + list.toString());
   }
 
     
