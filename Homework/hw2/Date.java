@@ -151,9 +151,7 @@ class Date {
    *  @return true if and only if this Date is after d. 
    */
   public boolean isAfter(Date d) {
-    if(this.toString().equals(d.toString()))
-      return false;
-    return (!isBefore(d))? true: false;                        // replace this line with your solution
+    return d.isBefore(this)? true : false;                        // replace this line with your solution
   }
 
   /** Returns the number of this Date in the year.
