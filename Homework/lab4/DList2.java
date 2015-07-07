@@ -75,6 +75,12 @@ public class DList2 {
    */
   public void insertFront(int i) {
     // Your solution here.
+    DListNode2 node = new DListNode2(i);
+    node.prev = head;
+    node.next = head.next;
+    head.next.prev = node;
+    head.next = node; 
+    size++;
   }
 
   /**
@@ -83,6 +89,14 @@ public class DList2 {
    */
   public void removeFront() {
     // Your solution here.
+    if(size == 0)
+      return;
+    DListNode2 p = head.next;
+    p.next.prev = head;
+    head.next = p.next;
+    p.next = null;
+    p.prev = null;
+    size --;
   }
 
   /**
