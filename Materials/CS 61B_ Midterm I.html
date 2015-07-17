@@ -1,0 +1,201 @@
+
+<!-- saved from url=(0052)http://www.cs.berkeley.edu/~jrs/61b/exam/14mid1.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>CS 61B:  Midterm I</title>
+<style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style></head>
+<body bgcolor="ffffff">
+
+<font size="6" color="009000">
+<a href="http://www.cs.berkeley.edu/~jrs/61b/index.html">
+CS 61B:  Data Structures</a></font>
+<font color="009000">(Spring 2014)</font><br>
+<font size="6" color="009000">
+Midterm I</font><br>
+<p>
+
+
+</p><h3>Solutions</h3>
+<p>
+
+<b>Problem 1.</b>  (10 points) <b>A miscellany.</b>
+</p><p>
+
+<b>a.</b>
+
+We'll accept any of the following.
+</p><ul>
+<li>  To reference the object the currently running method was called on.
+</li><li>  To call a constructor from another constructor of the same class
+      (operating on the same object).
+</li><li>  To refer to an instance variable that is overshadowed by
+      a local variable.
+</li></ul>
+
+<p>
+
+<b>b.</b>
+
+</p><pre><tt>
+  for (int i = 1; i &lt; n; i = i + 2) {
+    process(n);
+  }
+</tt></pre>
+
+<p>
+
+<b>c.</b>
+
+</p><ul>
+<li>  <tt>a:</tt>  <tt>float</tt> or <tt>double</tt>.
+</li><li>  <tt>b:</tt>  Java will only compile this code
+                   if <tt>b</tt> has type <tt>Object</tt>; however,
+                   we will also accept
+                   “<tt>X</tt> or any superclass of <tt>X</tt>.”
+</li><li>  <tt>c:</tt>  <tt>boolean</tt>.
+</li><li>  <tt>d:</tt>  Any reference
+                   (<tt>Object</tt> or any subclass of <tt>Object</tt>).
+</li><li>  <tt>e:</tt>  Any superclass or subclass of <tt>Y</tt>.
+
+</li></ul>
+
+<p>
+
+<b>d.</b>
+
+<img src="./CS 61B_ Midterm I_files/boxes14.gif" width="607" height="432" border="0" align="top">
+
+</p><p>
+
+
+<b>Problem 2.</b>  (8 points) <b>Inheritance.</b>
+
+</p><pre><tt>
+public interface X {
+  public void whatever();
+}
+
+public abstract class Profile implements X {
+  protected double weight;              // Maximize my privacy, please.
+
+  public Profile(double weight) {
+    this.weight = weight;
+  }
+
+  public abstract double date(double food);
+
+  public int date(int food) {
+    return (int) date((double) food);
+  }
+
+  public String introduce() {
+    return "I'm neurotic and vindictive and I weigh " + weight;
+  }
+
+  public static void main(String[] args) {
+    Profile p = new DatingProfile(260.0);
+    ((DatingProfile) p).diet(p.weight, 25.0);
+    System.out.println(p.introduce());
+  }
+}
+
+public class DatingProfile extends Profile {
+  public DatingProfile(double weight) {
+    super(weight - 70.0);
+  }
+
+  public double date(double food) {
+    weight = weight + (double) food;
+    return weight;
+  }
+
+  public void diet(double weight, double loss) {
+    weight = weight - loss;
+  }
+
+  public String introduce() {
+    return "I'm feisty and spontaneous and I weigh " + (weight - 60);
+  }
+
+  public void whatever() { }
+}
+</tt></pre>
+
+The code prints:
+<tt>I'm feisty and spontaneous and I weigh 130.0</tt>
+
+<p>
+
+
+<b>Problem 3.</b>  (7 points)
+<b>Lengthening runs.</b>
+</p><p>
+
+
+Here's an example of a recursive solution.
+
+</p><pre><tt>
+  public int lengthenRuns() {
+    if (next == null) {
+      next = new SListNode(item, null);
+      return 1;
+    }
+
+    if (item == next.item) {
+      return next.lengthenRuns();
+    }
+
+    next = new SListNode(item, next);
+    return 1 + next.next.lengthenRuns();
+  }
+</tt></pre>
+
+Most students wrote iterative solutions (as opposed to recursive).
+This has the big advantage that you can process much longer lists
+without running out of stack space, but the code is somewhat more complicated.
+
+<pre><tt>
+  public int lengthenRuns() {
+    int count = 1;
+    SListNode n = this;
+
+    while (n.next != null) {
+      if (n.item != n.next.item) {
+        n.next = new SListNode(n.item, n.next);
+        n = n.next;
+        count++;
+      }
+      n = n.next;
+    }
+
+    n.next = new SListNode(n.item, null);
+    return count;
+  }
+</tt></pre>
+
+One final reminder to the students who took the exam:
+In Java, <tt>this</tt> can <b>never</b> be <tt>null</tt>.
+Many of you started with comparisons like <tt>if (this == null)</tt>,
+which are usually harmless but are always completely unnecessary.
+
+
+<hr>
+<address>
+Mail inquiries to
+<a href="mailto:cs61b@cory.eecs">cs61b@cory.eecs</a>
+</address>
+
+
+</body></html>

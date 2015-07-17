@@ -1,1 +1,0 @@
-Your goal for this exercise is to modify Dog so that DogLauncher compiles and runs.
