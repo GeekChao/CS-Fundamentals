@@ -1,0 +1,82 @@
+Answered by Tianxiang
+
+Part I: Assignments and Casting (1 point)
+-----------------------------------------
+Let Y be a subclass of X, and let y and x be variables of classes Y and X respectively. From lecture, you know that the assignment “x = y” is valid, but the assignment “y = (Y) x” requires a cast to compile, and will cause a run-time error if x references an object that isn’t a Y.
+
+What about arrays of objects? Suppose xa is an array of X’s, and ya is an array of Y’s.
+
+1. At compile-time, can we assign xa to ya, and vice versa? When is a cast required?
+
+2. At run-time, if ya references an array of Y’s, can we assign it to xa? Can we then assign it back from xa to ya?
+
+3. If xa references an array of X’s (that are not Y’s), can we assign it to ya? Can we then assign it back from ya to xa? Does it make a difference if the array of type X[] references objects that are all of class Y? Why do you think this is the case?
+
+*** Answer ***
+1. If xa's (dynamic) class is X's, we cannot assign xa to ya, which causes a compile-time error. Even with a cast, it triggers a run-time error, because xa is superclass of ya. On the otherhand, compiler allows us to assign ya without cast.
+
+2. If ya references an array of Y's, we can assing it to xa without question. In addition, compiler allowes us to assign it back to ya from xa with a cast, ya = (Y[]) xa.
+
+3. Just like question 1, we cannot assing xa that references X's to ya, even with case. However, if xa references an array of Y's, assignment is allowed from xa to ya with a cast such as at the end of answer 2.
+
+Part II: Conflicting Declarations (1 point)
+-----------------------------------------
+Suppose a subclass inherits a method implementation from a superclass, and implements a Java interface (that’s the “interface” keyword) that contains a method with the same name and prototype.
+
+1. Will Java compile the result?
+
+2. What if the method declaration in the interface has a different return type?
+
+3. What if the method declaration in the interface has the same return type, but a signature with a different parameter type?
+
+4. What if the method declaration in the interface has the same return type, and the same number of parameters and parameter types, but those parameters have different names?
+
+*** Answer ***
+1. Java compile the code and run successfully. If without overriden in subclass, the output is superclass method.
+
+2. Java doesn't compile and throw a compile time error because subclass is not abstract class and doesn't override method in interface.
+
+3. The situation is same as question 2. So any difference in prototype (return, name, parameter type and order) makes a new method.
+
+4. Works fine.
+
+Part III: More Conflicting Declarations (1 point)
+-------------------------------------------------
+Suppose a subclass inherits a “public static final” constant from a superclass, and implements a Java interface that contains a “public static final” constant with the same name.
+
+1. Will Java compile the result? Does it make any difference whether the constant in the superclass and the constant in the interface have the same value?
+
+2. Write a main() method in the subclass that accesses the constant using the same name used in the superclass and the Java interface. Will Java compile the result? Does it make any difference whether the constant in the superclass and the constant in the interface have the same value?
+
+3. Figure out how to modify your main() method so that it accesses and prints one of the two conflicting values. (Look to the Lecture 9 notes for clues.) Make sure your code compiles and runs without errors.
+
+*** Answer ***
+1. Java doesn't compile the code because the two cosntant with same name are ambiguous, and same value or different doesn't matter.
+
+2. Same as Answer 1.
+
+3. We can read constants from superclass and interface using superclass.constant, and interface.constant sinc they are both public static.
+
+Part IV: Method Overriding (1 point)
+------------------------------------
+Consider a subclass that has a method that overrides a method with the same prototype in its superclass.
+
+1. Define a variable whose static type is the subclass and which references an object of the subclass. If we cast the variable to the superclass type before calling the overridden method
+
+	((Superclass) subclassvariable).method();
+
+does Java call the superclass method or the subclass method?
+
+2. Define a variable whose static type is the superclass and which references an object of the superclass (but not the subclass). If we cast the variable to the subclass type before calling the method, does Java call the superclass method or the subclass method?
+
+3. Suppose you have an object whose class is the subclass. Can you figure out a way to call the superclass method on that object without having to go through the subclass method of the same name?
+
+*** Answer ***
+1. If static type and dynamic class are both sublcass, then the output is still subclass method, even with cast.
+
+2. Neither are methods called because superclass cannot be cast to subclass. The compiler gives a compile-time error.
+
+3. No possible.
+
+
+
