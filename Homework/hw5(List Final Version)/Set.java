@@ -8,7 +8,7 @@ import list.*;
  **/
 public class Set {
   /* Fill in the data fields here. */
-
+  List list;
   /**
    * Set ADT invariants:
    *  1)  The Set's elements must be precisely the elements of the List.
@@ -24,6 +24,8 @@ public class Set {
    **/
   public Set() { 
     // Your solution here.
+    //list = new DList();
+    list = new SList();
   }
 
   /**
@@ -33,7 +35,7 @@ public class Set {
    **/
   public int cardinality() {
     // Replace the following line with your solution.
-    return 0;
+    return list.length();
   }
 
   /**
@@ -44,8 +46,36 @@ public class Set {
    *
    *  Performance:  runs in O(this.cardinality()) time.
    **/
-  public void insert(Comparable c) {
+  public void insert(Comparable c) throws InvalidNodeException{
     // Your solution here.
+    if(list.length() == 0){ // no elements in the set
+      list.insertFront(c);
+    }else{
+      ListNode a = list.front(), b;
+      for(int i = 1; i <= list.length(); i++){
+        if(a.compareTo(c) == 0){ // a == c
+          break;
+        }else if(a.compareTo(c) == 1){ // a > c
+          a.insertBefore(c);
+          break;
+        }else{   //a < c
+          if(i == list.length()){  // the end node of list
+            a.insertAfter(c);
+            break;
+          }else{
+             b = a.next();
+            if(b.compareTo(c) == 1){  // b > c
+              a.insertAfter(c);
+              break;
+            }else if(b.compareTo(c) == 0){  //b == c
+              break;
+            }else{  //b < c
+                a = b;
+            }
+          }
+        }
+      }
+    }    
   }
 
   /**
@@ -63,8 +93,16 @@ public class Set {
    *  DO NOT MODIFY THE SET s.
    *  DO NOT ATTEMPT TO COPY ELEMENTS; just copy _references_ to them.
    **/
-  public void union(Set s) {
+  public void union(Set s) throws InvalidNodeException{
     // Your solution here.
+    if(s.list.length() == 0) // no elements in 's' set
+      return;
+
+    ListNode pNode = s.list.front();
+    for(int i = 1; i <= s.list.length(); i++){ 
+      insert((Comparable)pNode.item());
+      pNode = pNode.next();
+    }
   }
 
   /**
@@ -80,8 +118,41 @@ public class Set {
    *  DO NOT CONSTRUCT ANY NEW NODES.
    *  DO NOT ATTEMPT TO COPY ELEMENTS.
    **/
-  public void intersect(Set s) {
+  public void intersect(Set s) throws InvalidNodeException{
     // Your solution here.
+    ListNode pNode, qNode, tmp;
+    int i, j;
+    if( (list.length() > 0 ) && (s.list.length() > 0) ){
+      pNode = list.front();
+      for(i = 1; i <= list.length(); i++){
+        qNode = s.list.front();
+
+        for(j = 1; j <= s.list.length(); j++){
+          if(pNode.compareTo(qNode.item()) == 0)
+            break;
+          
+          qNode = qNode.next();
+          if(j == s.list.length()){ //no same element
+            tmp = pNode;
+            pNode = pNode.next();
+            tmp.remove();
+          }
+        }
+
+        if(j <= s.list.length())
+          pNode = pNode.next();
+      }
+    }else{
+      if(list.length() == 0)  // Null Set
+        return;
+      if(s.list.length() == 0){ //Clean this set if 's' set has no elements.
+        pNode = list.back();
+        for(i = 1; i <= list.length(); i++){
+          pNode.remove();
+          pNode = pNode.prev();
+        }
+      }     
+    }
   }
 
   /**
@@ -99,12 +170,26 @@ public class Set {
    *            FORMAT, RIGHT UP TO THE TWO SPACES BETWEEN ELEMENTS.  ANY
    *            DEVIATIONS WILL LOSE POINTS.
    **/
-  public String toString() {
+  public String toString(){
     // Replace the following line with your solution.
-    return "";
+    if(list.length() == 0)
+      return "{  }";
+
+    String setStr = "{  ";
+    ListNode pNode = list.front();
+    for(int i = 1; i <= list.length(); i++){
+      try{
+         setStr += pNode.item() + "  ";
+          pNode = pNode.next();
+      }catch (InvalidNodeException lbe) {
+        System.out.println("p.next() should throw an exception, and did.");
+      }
+    }
+    setStr += "}";
+    return setStr;
   }
 
-  public static void main(String[] argv) {
+  public static void main(String[] argv) throws InvalidNodeException{
     Set s = new Set();
     s.insert(new Integer(3));
     s.insert(new Integer(4));

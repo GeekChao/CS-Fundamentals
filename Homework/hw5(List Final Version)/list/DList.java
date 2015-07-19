@@ -59,6 +59,11 @@ public class DList extends List {
   public DList() {
     // Your solution here.  Similar to Homework 4, but now you need to specify
     //   the `list' field (second parameter) as well.
+    DListNode node = newNode(null, null, null, null);
+    head = node;
+    head.next = node;
+    head.prev = node;
+    size = 0;
   }
 
   /**
@@ -71,6 +76,10 @@ public class DList extends List {
   public void insertFront(Object item) {
     // Your solution here.  Similar to Homework 4, but now you need to specify
     //   the `list' field (second parameter) as well.
+    DListNode pNode = newNode(item, this, head, head.next);
+    head.next.prev = pNode;
+    head.next = pNode;
+    size++;
   }
 
   /**
@@ -83,6 +92,10 @@ public class DList extends List {
   public void insertBack(Object item) {
     // Your solution here.  Similar to Homework 4, but now you need to specify
     //   the `list' field (second parameter) as well.
+    DListNode pNode = newNode(item, this, head.prev, head);
+    head.prev.next = pNode;
+    head.prev = pNode;
+    size++;
   }
 
   /**

@@ -8,7 +8,7 @@ package list;
  *  DO NOT CHANGE THIS FILE.
  **/
 
-public abstract class ListNode {
+public abstract class ListNode implements Comparable{
 
   /**
    *  item references the item stored in the current node.
@@ -59,6 +59,20 @@ public abstract class ListNode {
       throw new InvalidNodeException();
     }
     this.item = item;
+  }
+
+  @Override
+  public int compareTo(Object o){
+    Integer a = (Integer)this.item;
+    Integer b = (Integer)o;
+    if(a.intValue() == b.intValue()){
+      return 0;
+    }else if(a.intValue() > b.intValue()){
+      return 1;
+    }else if(a.intValue() < b.intValue()){
+      return -1;
+    }
+    return -2;
   }
 
   /**
