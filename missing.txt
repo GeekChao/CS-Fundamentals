@@ -1,0 +1,8 @@
+project1
+
+Project2:
+1.Lecture 18	lab8 (Show your TA your module design for Project 2)
+2.Vedio11 Game Trees; 
+3.Extra-credit---Vedio14 1:15:00 Transposition Table; 
+
+project3
