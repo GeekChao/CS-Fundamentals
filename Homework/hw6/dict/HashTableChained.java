@@ -154,14 +154,9 @@ public class HashTableChained implements Dictionary {
     int bucket = compFunction(key.hashCode());
     if(!entry_list[bucket].isEmpty()){
       ListNode node = entry_list[bucket].front();
-      try{
-        return (Entry)node.item();
-      }catch(InvalidNodeException e){
-        System.out.println("Invaild Node");
-      }
-      /*while(node.isValidNode()){
+      while(node.isValidNode()){
         try{
-          if(equals(node.item())){
+          if(key.equals(((Entry)node.item()).key())){
             return (Entry)node.item();
           }else{
             node = node.next();
@@ -169,7 +164,7 @@ public class HashTableChained implements Dictionary {
         }catch(InvalidNodeException e){
           System.out.println("Invaild Node");
         }
-      }*/
+      }
     }
       
     return null;
@@ -193,17 +188,9 @@ public class HashTableChained implements Dictionary {
     int bucket = compFunction(key.hashCode());
     if(!entry_list[bucket].isEmpty()){
       ListNode node = entry_list[bucket].front();
-      try{
-        Entry entry = (Entry)node.item();
-        node.remove();
-        size--;
-        return entry;
-      }catch(InvalidNodeException e){
-        System.out.println("Invaild Node");
-      }
-      /*while(node.isValidNode()){
+      while(node.isValidNode()){
         try{
-          if(key.equals(node.item())) {
+          if(key.equals(((Entry)node.item()).key())) {
             Entry entry = (Entry)node.item();
             node.remove();
             size--;
@@ -214,7 +201,7 @@ public class HashTableChained implements Dictionary {
         }catch(InvalidNodeException e){
           System.out.println("Invaild Node");
         }
-      }*/
+      }
     }
     
     return null;
