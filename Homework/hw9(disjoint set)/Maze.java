@@ -77,9 +77,71 @@ public class Maze {
      * integer.  randInt() generates different numbers every time the program
      * is run, so that you can make lots of different mazes.
      **/
+     DisjointSets mSetArray = new DisjointSets(horiz * vert);
+     /*store interior walls*/
+     int numInWall = horiz * (vert - 1) + vert * (horiz - 1);
+     int k = 0;
+     Wall inWall = null;
+     Wall[] inWallArray = new Wall[numInWall];
+     //store below interior walls
+     for(j = 0; j < vert - 1; j++)
+      for(i = 0; i < horiz; i++){
+          inWall = new Wall(i, j, Wall.HORIZ_WALL);
+          inWallArray[k++] = inWall;
+      }
+      //store right interior walls
+      for(i = 0; i < horiz - 1; i++)
+      for(j = 0; j < vert; j++){
+          inWall = new Wall(i, j, Wall.VERT_WALL);
+          inWallArray[k++] = inWall;
+      }
 
+      /*order the interior walls of maze in a random order*/
+      int w = numInWall, select;
+      Wall temp;
+      while(w > 1){
+        select = randInt(w);
+        temp = inWallArray[select];
+        inWallArray[select] = inWallArray[w - 1];
+        inWallArray[w - 1] = temp;
+        w--;
+      }
 
-
+      /*visit the walls in the random order*/
+      int x, y, cell1, cell2, root1, root2;
+      for(k = 0; k < numInWall; k++){
+        x = inWallArray[k].getX();
+        y = inWallArray[k].getY();
+        if(inWallArray[k].getType() == Wall.HORIZ_WALL){
+          cell1 = x + y * horiz;
+          cell2 = x + (y + 1) * horiz;
+          root1 = mSetArray.find(cell1);
+          root2 = mSetArray.find(cell2);
+          if(root1 != root2){
+            if(horizontalWall(x, y) == true)
+              hWalls[x][y] = false;
+            try{
+              mSetArray.union(root1, root2);
+            }catch(UnionException e){
+             System.out.println(e);
+            }
+          }
+        }else if(inWallArray[k].getType() == Wall.VERT_WALL){
+          cell1 = x + y * horiz;
+          cell2 = (x +1) + y * horiz;
+          root1 = mSetArray.find(cell1);
+          root2 = mSetArray.find(cell2);
+          if(root1 != root2){
+            if(verticalWall(x, y) == true)
+              vWalls[x][y] = false;
+            try{
+              mSetArray.union(root1, root2);
+            }catch(UnionException e){
+              System.out.println(e);
+            }          
+          }
+        }
+      }
   }
 
   /**

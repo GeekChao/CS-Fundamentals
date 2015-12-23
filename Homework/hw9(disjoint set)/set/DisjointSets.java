@@ -40,7 +40,15 @@ public class DisjointSets {
    *  @param root1 the root of the first set.
    *  @param root2 the root of the other set.
    **/
-  public void union(int root1, int root2) {
+  public void union(int root1, int root2) throws UnionException{
+    if(root1 == root2){
+      throw new UnionException("Error: same root");
+    }else if(array[root1] >= 0){
+      throw new UnionException("Error: root1 isn't a root of its respective set");
+    }else if(array[root2] >= 0){
+      throw new UnionException("Error: root2 isn't a root of its respective set");
+    }
+
     if (array[root2] < array[root1]) {                 // root2 has larger tree
       array[root2] += array[root1];        // update # of items in root2's tree
       array[root1] = root2;                              // make root2 new root
@@ -82,7 +90,13 @@ public class DisjointSets {
       for (int j = 0; j + k < NumElements; j += 2 * k) {
         set1 = s.find(j);
         set2 = s.find(j + k);
-        s.union(set1, set2);
+
+        try{
+          s.union(set1, set2);
+        }catch(UnionException e){
+          System.out.println(e);
+          System.exit(-1);
+        } 
       }
     }
 
