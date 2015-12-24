@@ -20,7 +20,8 @@ public class UDGraph
 
   private boolean[][] adjMatrix;
   private int vertices;
-  private int edges;                   
+  private int edges;    
+  private int startVertex;               
 
   /**
    *  Constructs a graph with n vertices and no edges.
@@ -31,7 +32,7 @@ public class UDGraph
     adjMatrix = new boolean[n][n];
     for (int i = 0; i < vertices; i++ ) {
       for (int j = 0; j < vertices; j++ ) {
-	adjMatrix[i][j] = false;
+	       adjMatrix[i][j] = false;
       }
     }
   }
@@ -84,7 +85,7 @@ public class UDGraph
   public void addEdge(int origin, int destination) {
     if (validVertex(origin) && validVertex(destination)) {
       if (!adjMatrix[origin][destination]) {
-	adjMatrix[origin][destination] = true;
+	      adjMatrix[origin][destination] = true;
         edges++;
       }
     }    
@@ -99,8 +100,8 @@ public class UDGraph
   public void removeEdge(int origin, int destination) {
     if (validVertex(origin) && validVertex(destination)) {
       if (adjMatrix[origin][destination]) {
-	adjMatrix[origin][destination] = false;
-	edges--;
+      	adjMatrix[origin][destination] = false;
+      	edges--;
       }
     }        
   }
@@ -115,6 +116,22 @@ public class UDGraph
   public UDGraph length2Paths() {
     UDGraph newGraph = new UDGraph(vertices);
     // Put your answer to Part I here.
+    for(int i = 0; i < vertices; i++)
+      for(int j = 0; j < vertices; j++){
+        if(i == j){
+          if(adjMatrix[i][j] == true) newGraph.addEdge(i, j);
+        }else{
+          if(adjMatrix[i][j] == true && adjMatrix[j][i] == true){
+             newGraph.addEdge(i, i);
+          }else{
+            for(int k = 0; k < vertices; k++){
+              if(k != i && k != j){
+                if(adjMatrix[j][k] == true && adjMatrix[i][j] == true) newGraph.addEdge(i, k);
+              }
+            }
+          }
+        }
+      }
     return newGraph;
   }
 
@@ -128,7 +145,34 @@ public class UDGraph
   public UDGraph paths(int length) {
     UDGraph newGraph = new UDGraph(vertices);
     // Put your answer to Part II here.
+    for(int i = 0; i < vertices; i++)
+      for(int j = 0; j < vertices; j++){
+        if(i == j){
+          if(adjMatrix[i][j] == true) newGraph.addEdge(i, j);
+        }else{
+          if(adjMatrix[i][j] == true){
+            startVertex = i;
+            depthLengthSearch(i, j, length, newGraph);
+          }
+        }
+      }
+
     return newGraph;
+  }
+
+  private void depthLengthSearch(int i, int j, int len, UDGraph newGraph){
+    if(len <= 1){
+      newGraph.addEdge(startVertex, j);
+      return;
+    }
+
+    len--;
+
+    for(int k = 0; k < vertices; k++){
+      if(k != j && adjMatrix[j][k] == true){
+          depthLengthSearch(j, k, len, newGraph);
+      }
+    }
   }
 
   /**
@@ -141,9 +185,9 @@ public class UDGraph
     String s = vertices + " vertices and " + edges + " edges\n";
     for (i = 0; i < vertices; i++) {
       for (j = 0; j < vertices - 1; j++) {
-	s = s + (adjMatrix[i][j] ? "t" : ".")  + " ";
+	     s = s + (adjMatrix[i][j] ? "t" : ".")  + " ";
       }
-      s = s + (adjMatrix[i][j] ? "t" : ".")  + "\n";
+       s = s + (adjMatrix[i][j] ? "t" : ".")  + "\n";
     }
     return s;
   }
