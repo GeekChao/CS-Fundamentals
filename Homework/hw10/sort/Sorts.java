@@ -7,8 +7,8 @@ public class Sorts {
   /**
    *  Place any final static fields you would like to have here.
    **/
-
-
+   private static final int NUMBUCKET = 16;
+   private static final int TOTALDIGIT = 32 / 4;
   /**
    *  countingSort() sorts an array of int keys according to the
    *  values of _one_ of the base-16 digits of each key.  "whichDigit"
@@ -25,8 +25,27 @@ public class Sorts {
    *    Note:  Return a _newly_ created array.  DO NOT CHANGE THE ARRAY keys.
    **/
   public static int[] countingSort(int[] keys, int whichDigit) {
-    // Replace the following line with your solution.
-    return null;
+    //counting the keys
+    int[] count = new int[NUMBUCKET];
+    int[] sortedKeys = new int[keys.length];
+    int i, digit, temp, total = 0;
+    for(i = 0; i < keys.length; i++){
+      digit = (keys[i] >> (whichDigit * 4)) & 15;
+      count[digit]++;
+    }
+    //scan count array
+    for(i = 0; i < count.length; i++){
+      temp = count[i];
+      count[i] = total;
+      total = total + temp;
+    }
+    //order array
+    for(i = 0; i < sortedKeys.length; i++){
+      digit = (keys[i] >> (whichDigit * 4)) & 15;
+      sortedKeys[count[digit]] = keys[i];
+      count[digit]++;
+    }
+    return sortedKeys;
   }
 
   /**
@@ -39,8 +58,12 @@ public class Sorts {
    *    Note:  Return a _newly_ created array.  DO NOT CHANGE THE ARRAY keys.
    **/
   public static int[] radixSort(int[] keys) {
-    // Replace the following line with your solution.
-    return null;
+    int[] sortedKeys = new int[keys.length];
+    for(int digit = 0; digit < TOTALDIGIT; digit++){
+      sortedKeys = countingSort(keys, digit);
+      keys = sortedKeys;
+    }
+    return sortedKeys;
   }
 
   /**
