@@ -1,2 +1,0 @@
-insertAfter(item, head);
-insertBefore(item, head);
