@@ -1,2 +1,8 @@
+*.class
+*.apk
+bin/
+gen/
+.settings/
+proguard/
 
 .DS_Store
