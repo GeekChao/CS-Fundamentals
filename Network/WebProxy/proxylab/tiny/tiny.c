@@ -16,20 +16,24 @@ void clienterror(int fd, char *cause, char *errnum,
 
 int main(int argc, char **argv) 
 {
-    int listenfd, connfd, port, clientlen;
-    struct sockaddr_in clientaddr;
+    int listenfd, connfd;
+    char hostname[MAXLINE], port[MAXLINE];
+    socklen_t clientlen;
+    struct sockaddr_storage clientaddr;
 
     /* Check command line args */
     if (argc != 2) {
 	fprintf(stderr, "usage: %s <port>\n", argv[0]);
 	exit(1);
     }
-    port = atoi(argv[1]);
 
-    listenfd = Open_listenfd(port);
+    listenfd = Open_listenfd(argv[1]);
     while (1) {
 	clientlen = sizeof(clientaddr);
 	connfd = Accept(listenfd, (SA *)&clientaddr, &clientlen); //line:netp:tiny:accept
+        Getnameinfo((SA *) &clientaddr, clientlen, hostname, MAXLINE, 
+                    port, MAXLINE, 0);
+        printf("Accepted connection from (%s, %s)\n", hostname, port);
 	doit(connfd);                                             //line:netp:tiny:doit
 	Close(connfd);                                            //line:netp:tiny:close
     }
@@ -47,14 +51,16 @@ void doit(int fd)
     char buf[MAXLINE], method[MAXLINE], uri[MAXLINE], version[MAXLINE];
     char filename[MAXLINE], cgiargs[MAXLINE];
     rio_t rio;
-  
+
     /* Read request line and headers */
     Rio_readinitb(&rio, fd);
-    Rio_readlineb(&rio, buf, MAXLINE);                   //line:netp:doit:readrequest
+    if (!Rio_readlineb(&rio, buf, MAXLINE))  //line:netp:doit:readrequest
+        return;
+    printf("%s", buf);
     sscanf(buf, "%s %s %s", method, uri, version);       //line:netp:doit:parserequest
     if (strcasecmp(method, "GET")) {                     //line:netp:doit:beginrequesterr
-       clienterror(fd, method, "501", "Not Implemented",
-                "Tiny does not implement this method");
+        clienterror(fd, method, "501", "Not Implemented",
+                    "Tiny does not implement this method");
         return;
     }                                                    //line:netp:doit:endrequesterr
     read_requesthdrs(&rio);                              //line:netp:doit:readrequesthdrs
@@ -87,7 +93,7 @@ void doit(int fd)
 /* $end doit */
 
 /*
- * read_requesthdrs - read and parse HTTP request headers
+ * read_requesthdrs - read HTTP request headers
  */
 /* $begin read_requesthdrs */
 void read_requesthdrs(rio_t *rp) 
@@ -95,6 +101,7 @@ void read_requesthdrs(rio_t *rp)
     char buf[MAXLINE];
 
     Rio_readlineb(rp, buf, MAXLINE);
+    printf("%s", buf);
     while(strcmp(buf, "\r\n")) {          //line:netp:readhdrs:checkterm
 	Rio_readlineb(rp, buf, MAXLINE);
 	printf("%s", buf);
@@ -148,9 +155,12 @@ void serve_static(int fd, char *filename, int filesize)
     get_filetype(filename, filetype);       //line:netp:servestatic:getfiletype
     sprintf(buf, "HTTP/1.0 200 OK\r\n");    //line:netp:servestatic:beginserve
     sprintf(buf, "%sServer: Tiny Web Server\r\n", buf);
+    sprintf(buf, "%sConnection: close\r\n", buf);
     sprintf(buf, "%sContent-length: %d\r\n", buf, filesize);
     sprintf(buf, "%sContent-type: %s\r\n\r\n", buf, filetype);
     Rio_writen(fd, buf, strlen(buf));       //line:netp:servestatic:endserve
+    printf("Response headers:\n");
+    printf("%s", buf);
 
     /* Send response body to client */
     srcfd = Open(filename, O_RDONLY, 0);    //line:netp:servestatic:open
@@ -169,6 +179,8 @@ void get_filetype(char *filename, char *filetype)
 	strcpy(filetype, "text/html");
     else if (strstr(filename, ".gif"))
 	strcpy(filetype, "image/gif");
+    else if (strstr(filename, ".png"))
+	strcpy(filetype, "image/png");
     else if (strstr(filename, ".jpg"))
 	strcpy(filetype, "image/jpeg");
     else
@@ -190,7 +202,7 @@ void serve_dynamic(int fd, char *filename, char *cgiargs)
     sprintf(buf, "Server: Tiny Web Server\r\n");
     Rio_writen(fd, buf, strlen(buf));
   
-    if (Fork() == 0) { /* child */ //line:netp:servedynamic:fork
+    if (Fork() == 0) { /* Child */ //line:netp:servedynamic:fork
 	/* Real server would set all CGI vars here */
 	setenv("QUERY_STRING", cgiargs, 1); //line:netp:servedynamic:setenv
 	Dup2(fd, STDOUT_FILENO);         /* Redirect stdout to client */ //line:netp:servedynamic:dup2
