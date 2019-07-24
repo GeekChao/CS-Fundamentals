@@ -1,4 +1,5 @@
 from operator import add, sub
+from math import sqrt, floor
 
 def a_plus_abs_b(a, b):
     """Return a+abs(b), but without calling abs.
@@ -9,9 +10,9 @@ def a_plus_abs_b(a, b):
     5
     """
     if b < 0:
-        f = _____
+        f = sub
     else:
-        f = _____
+        f = add
     return f(a, b)
 
 def two_of_three(a, b, c):
@@ -27,7 +28,10 @@ def two_of_three(a, b, c):
     >>> two_of_three(5, 5, 5)
     50
     """
-    return _____
+    if c > a: a, c = c, a
+    if c > b: b, c = c, a
+
+    return a * a + b * b
 
 def largest_factor(n):
     """Return the largest factor of n that is smaller than n.
@@ -39,7 +43,14 @@ def largest_factor(n):
     >>> largest_factor(13) # factor is 1 since 13 is prime
     1
     """
-    "*** YOUR CODE HERE ***"
+    def guess(factor = 2):
+        if n % factor == 0:
+            return n / factor
+        
+        return guess(factor + 1)
+
+    return guess()
+        
 
 def if_function(condition, true_result, false_result):
     """Return true_result if condition is a true value, and
@@ -74,27 +85,26 @@ def with_if_function():
     return if_function(c(), t(), f())
 
 def c():
-    "*** YOUR CODE HERE ***"
+    return True
 
 def t():
-    "*** YOUR CODE HERE ***"
+    print(1)
 
 def f():
-    "*** YOUR CODE HERE ***"
+    return 1
 
-def hailstone(n):
-    """Print the hailstone sequence starting at n and return its
-    length.
+def hailstone(n, len = 0):
+    def travel(n):
+        print(n)
+        len = len + 1 #Using variable 'len' before assignment
 
-    >>> a = hailstone(10)
-    10
-    5
-    16
-    8
-    4
-    2
-    1
-    >>> a
-    7
-    """
-    "*** YOUR CODE HERE ***"
+        if n == 1: 
+            return len
+        
+        if n % 2 == 0: 
+            return travel(n / 2, len + 1)
+        else:
+            return travel(n * 3 + 1, len + 1)
+        
+        
+    return travel(n) 
