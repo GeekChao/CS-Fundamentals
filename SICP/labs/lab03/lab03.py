@@ -13,21 +13,8 @@ def gcd(a, b):
     >>> gcd(40, 40)
     40
     """
-    "*** YOUR CODE HERE ***"
+    if a == 0: return b
+    if b == 0: return a
 
-def hailstone(n):
-    """Print out the hailstone sequence starting at n, and return the
-    number of elements in the sequence.
-
-    >>> a = hailstone(10)
-    10
-    5
-    16
-    8
-    4
-    2
-    1
-    >>> a
-    7
-    """
-    "*** YOUR CODE HERE ***"
+    if a < b: a, b = b, a
+    return gcd(b, a % b)

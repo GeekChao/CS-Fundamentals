@@ -1,36 +1,7 @@
 """ Optional problems for Lab 3 """
 
 from lab03 import *
-
-## Higher order functions
-
-def cycle(f1, f2, f3):
-    """Returns a function that is itself a higher-order function.
-
-    >>> def add1(x):
-    ...     return x + 1
-    >>> def times2(x):
-    ...     return x * 2
-    >>> def add3(x):
-    ...     return x + 3
-    >>> my_cycle = cycle(add1, times2, add3)
-    >>> identity = my_cycle(0)
-    >>> identity(5)
-    5
-    >>> add_one_then_double = my_cycle(2)
-    >>> add_one_then_double(1)
-    4
-    >>> do_all_functions = my_cycle(3)
-    >>> do_all_functions(2)
-    9
-    >>> do_more_than_a_cycle = my_cycle(4)
-    >>> do_more_than_a_cycle(2)
-    10
-    >>> do_two_cycles = my_cycle(6)
-    >>> do_two_cycles(1)
-    19
-    """
-    "*** YOUR CODE HERE ***"
+from math import sqrt, floor
 
 ## Lambda expressions
 
@@ -49,9 +20,9 @@ def is_palindrome(n):
     True
     """
     x, y = n, 0
-    f = lambda: _____
+    f = lambda: y * 10 + x % 10
     while x > 0:
-        x, y = _____, f()
+        x, y = x // 10, f()
     return y == n
 
 ## More recursion practice
@@ -64,6 +35,8 @@ def skip_mul(n):
     >>> skip_mul(8) # 8 * 6 * 4 * 2
     384
     """
+    if n == 1:
+        return 1
     if n == 2:
         return 2
     else:
@@ -79,7 +52,14 @@ def is_prime(n):
     >>> is_prime(521)
     True
     """
-    "*** YOUR CODE HERE ***"
+    if n <= 1: return False
+    if n == 2: return True
+    
+    k = 2
+    while k <= floor(sqrt(n)):
+        if n % k == 0: return False
+        k += 1
+    return True
 
 def interleaved_sum(n, odd_term, even_term):
     """Compute the sum odd_term(1) + even_term(2) + odd_term(3) + ..., up
@@ -89,7 +69,15 @@ def interleaved_sum(n, odd_term, even_term):
     ... interleaved_sum(5, lambda x: x, lambda x: x*x)
     29
     """
-    "*** YOUR CODE HERE ***"
+    def helper(n, sum = 0):
+        if n == 0: return sum
+
+        if n & 1 == 0: sum += even_term(n)
+        else: sum += odd_term(n)
+
+        return helper(n - 1, sum)
+
+    return helper(n)
 
 def ten_pairs(n):
     """Return the number of ten-pairs within positive integer n.
@@ -101,4 +89,16 @@ def ten_pairs(n):
     >>> ten_pairs(9641469)
     6
     """
-    "*** YOUR CODE HERE ***"
+    def count_digit(n, digit):
+        if n == 0:
+            return 0
+        elif n % 10 == digit:
+            return 1 + count_digit(n // 10, digit)
+        else:
+            return count_digit(n // 10, digit)
+
+    if n < 10:  
+        return 0
+    
+    return ten_pairs(n // 10) + count_digit(n // 10, 10 - n % 10)
+
