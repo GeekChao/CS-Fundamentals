@@ -85,7 +85,9 @@ def accumulate(combiner, base, n, term):
     >>> accumulate(mul, 2, 3, square)   # 2 * 1^2 * 2^2 * 3^2
     72
     """
-    return caclWithCombiner(combiner)(term)(n, base)
+    if n == 0: return base
+
+    return combiner(term(n), accumulate(combiner, base, n - 1, term))
 
 def summation_using_accumulate(n, term):
     """Returns the sum of term(1) + ... + term(n). The implementation
