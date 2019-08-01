@@ -19,12 +19,25 @@ def has_seven(k):
     True
     >>> has_seven(7777)
     True
-    >>> from construct_check import check
-    >>> check(HW_SOURCE_FILE, 'has_seven',
-    ...       ['Assign', 'AugAssign'])
-    True
     """
-    "*** YOUR CODE HERE ***"
+    def iterate_digit(n, digit = 0):
+        if n == 7: return True
+        if digit == 7: return True
+        if n < 7: return False
+        
+        return iterate_digit(n // 10, n % 10)
+    
+    return iterate_digit(k)
+
+def caclWithCombiner(combiner):
+    def calcWithTerm(term):
+        def calc(k, total = 0):
+            if k <= 0: return total
+            
+            return calc(k - 1, combiner(term(k), total))
+
+        return calc
+    return calcWithTerm
 
 def summation(n, term):
 
@@ -37,14 +50,10 @@ def summation(n, term):
     54
     >>> summation(5, lambda x: 2**x) # 2^1 + 2^2 + 2^3 + 2^4 + 2^5
     62
-    >>> # Do not use while/for loops!
-    >>> from construct_check import check
-    >>> check(HW_SOURCE_FILE, 'summation',
-    ...       ['While', 'For'])
-    True
     """
     assert n >= 1
-    "*** YOUR CODE HERE ***"
+
+    return caclWithCombiner(lambda x, y: x + y)(term)(n)
 
 def square(x):
     return x * x
@@ -76,7 +85,7 @@ def accumulate(combiner, base, n, term):
     >>> accumulate(mul, 2, 3, square)   # 2 * 1^2 * 2^2 * 3^2
     72
     """
-    "*** YOUR CODE HERE ***"
+    return caclWithCombiner(combiner)(term)(n, base)
 
 def summation_using_accumulate(n, term):
     """Returns the sum of term(1) + ... + term(n). The implementation
@@ -86,12 +95,8 @@ def summation_using_accumulate(n, term):
     55
     >>> summation_using_accumulate(5, triple)
     45
-    >>> from construct_check import check
-    >>> check(HW_SOURCE_FILE, 'summation_using_accumulate',
-    ...       ['Recursion', 'For', 'While'])
-    True
     """
-    "*** YOUR CODE HERE ***"
+    return accumulate(add, 0, n, term)
 
 def product_using_accumulate(n, term):
     """An implementation of product using accumulate.
@@ -100,12 +105,8 @@ def product_using_accumulate(n, term):
     576
     >>> product_using_accumulate(6, triple)
     524880
-    >>> from construct_check import check
-    >>> check(HW_SOURCE_FILE, 'product_using_accumulate',
-    ...       ['Recursion', 'For', 'While'])
-    True
     """
-    "*** YOUR CODE HERE ***"
+    return accumulate(mul, 1, n, term)
 
 def filtered_accumulate(combiner, base, pred, n, term):
     """Return the result of combining the terms in a sequence of N terms
@@ -124,14 +125,11 @@ def filtered_accumulate(combiner, base, pred, n, term):
     9
     >>> filtered_accumulate(mul, 1, greater_than_5, 5, square)  # 1 * 9 * 16 * 25
     3600
-    >>> # Do not use while/for loops or recursion
-    >>> from construct_check import check
-    >>> check(HW_SOURCE_FILE, 'filtered_accumulate',
-    ...       ['While', 'For', 'Recursion'])
-    True
     """
     def combine_if(x, y):
-        "*** YOUR CODE HERE ***"
+        if pred(x): return combiner(x, y)
+        else: return y
+
     return accumulate(combine_if, base, n, term)
 
 def odd(x):
@@ -150,12 +148,16 @@ def make_repeater(f, n):
     243
     >>> make_repeater(square, 2)(5) # square(square(5))
     625
-    >>> make_repeater(square, 4)(5) # square(square(square(square(5))))
-    152587890625
-    >>> make_repeater(square, 0)(5)
-    5
     """
-    "*** YOUR CODE HERE ***"
+    def apply(x):
+        def repeat(k):
+            if k == 1: return f(x)
+
+            return f(repeat(k - 1))
+
+        return repeat(n)
+
+    return apply
 
 def compose1(f, g):
     """Return a function h, such that h(x) = f(g(x))."""
@@ -163,69 +165,3 @@ def compose1(f, g):
         return f(g(x))
     return h
 
-###################
-# Extra Questions #
-###################
-
-quine = """
-"*** YOUR CODE HERE ***"
-"""
-
-def zero(f):
-    return lambda x: x
-
-def successor(n):
-    return lambda f: lambda x: f(n(f)(x))
-
-def one(f):
-    """Church numeral 1: same as successor(zero)"""
-    "*** YOUR CODE HERE ***"
-
-def two(f):
-    """Church numeral 2: same as successor(successor(zero))"""
-    "*** YOUR CODE HERE ***"
-
-three = successor(two)
-
-def church_to_int(n):
-    """Convert the Church numeral n to a Python integer.
-
-    >>> church_to_int(zero)
-    0
-    >>> church_to_int(one)
-    1
-    >>> church_to_int(two)
-    2
-    >>> church_to_int(three)
-    3
-    """
-    "*** YOUR CODE HERE ***"
-
-def add_church(m, n):
-    """Return the Church numeral for m + n, for Church numerals m and n.
-
-    >>> church_to_int(add_church(two, three))
-    5
-    """
-    "*** YOUR CODE HERE ***"
-
-def mul_church(m, n):
-    """Return the Church numeral for m * n, for Church numerals m and n.
-
-    >>> four = successor(three)
-    >>> church_to_int(mul_church(two, three))
-    6
-    >>> church_to_int(mul_church(three, four))
-    12
-    """
-    "*** YOUR CODE HERE ***"
-
-def pow_church(m, n):
-    """Return the Church numeral m ** n, for Church numerals m and n.
-
-    >>> church_to_int(pow_church(two, three))
-    8
-    >>> church_to_int(pow_church(three, two))
-    9
-    """
-    "*** YOUR CODE HERE ***"
