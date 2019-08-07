@@ -10,24 +10,9 @@ test = {
           >>> def echo(s0, s1):
           ...     print(s0, s1)
           ...     return echo
-          >>> s0, s1 = play(always_roll(1), always_roll(1), dice=make_test_dice(3), goal=4, say=echo)
-          d7882c94106188a2f424c5383b507923
-          b706c6a1e63c19ed82e4eb95fc6ba1cf
-          072ed6d8c8b94db1f2452887d165717d
-          # locked
-          """,
-          'hidden': False,
-          'locked': True
-        },
-        {
-          'code': r"""
-          >>> #
-          >>> def echo(s0, s1):
-          ...     print(s0, s1)
-          ...     return echo
-          >>> s0, s1 = play(always_roll(0), always_roll(0), goal=4, say=echo)
-          accd0f5c57e0f3fad13791aaecafc38b
-          f4662b3eb9f52d88dd7877043b417fc7
+          >>> s0, s1 = play(always_roll(0), always_roll(0), goal=2, say=echo)
+          46384f1b91067efe2db7061edf72cafa
+          3270ccc2d8e87b5fea4628d2c594dae7
           # locked
           """,
           'hidden': False,
@@ -43,11 +28,11 @@ test = {
           >>> def echo(s0, s1):
           ...     print(s0, s1)
           ...     return total
-          >>> s0, s1 = play(always_roll(1), always_roll(1), dice=make_test_dice(2, 3), goal=5, say=echo)
-          accd0f5c57e0f3fad13791aaecafc38b
-          26f5762c932a578994ea1c8fc7fa6c02
-          e3bcdb2715b868db45692ec2a5971a84
-          70e71b420a966665c548a3bb2cb30d7d
+          >>> s0, s1 = play(always_roll(0), always_roll(0), goal=7, say=echo)
+          46384f1b91067efe2db7061edf72cafa
+          16e2cf37e8254529473d9e0a36b75fcb
+          b2e4d14a8333b08801b894f7f3f9f3d8
+          872dbe4a4fe5d8451aa842c21194c866
           # locked
           """,
           'hidden': False,
@@ -57,7 +42,6 @@ test = {
       'scored': True,
       'setup': r"""
       >>> from hog import play, always_roll
-      >>> from dice import make_test_dice
       """,
       'teardown': '',
       'type': 'doctest'
@@ -74,7 +58,7 @@ test = {
           ...     print('**', s1)
           ...     return echo_1
           >>> s0, s1 = play(always_roll(0), always_roll(0), goal=1, say=both(echo_0, echo_1))
-          3f321d5ce997d2f3989685f56de8bdce
+          ef8fa39d05cae48a27c2f160ddf666f0
           4a64fe964dc771a219ed773c3a146c75
           # locked
           """,
@@ -84,27 +68,15 @@ test = {
         {
           'code': r"""
           >>> #
-          >>> s0, s1 = play(always_roll(3), always_roll(3), dice=make_test_dice(1, 2, 3, 3), goal=8, say=both(say_scores, announce_lead_changes()))
+          >>> s0, s1 = play(always_roll(0), always_roll(0), goal=10, say=both(say_scores, announce_lead_changes()))
           Player 0 now has 1 and Player 1 now has 0
           Player 0 takes the lead by 1
-          Player 0 now has 1 and Player 1 now has 1
-          Player 0 now has 2 and Player 1 now has 1
-          Player 0 takes the lead by 1
-          Player 0 now has 2 and Player 1 now has 9
-          Player 1 takes the lead by 7
-          """,
-          'hidden': False,
-          'locked': False
-        },
-        {
-          'code': r"""
-          >>> #
-          >>> s0, s1 = play(always_roll(0), always_roll(0), goal=8, say=both(say_scores, announce_lead_changes()))
-          Player 0 now has 2 and Player 1 now has 0
-          Player 0 takes the lead by 2
-          Player 0 now has 4 and Player 1 now has 2
-          Player 0 now has 2 and Player 1 now has 8
-          Player 1 takes the lead by 6
+          Player 0 now has 1 and Player 1 now has 2
+          Player 1 takes the lead by 1
+          Player 0 now has 2 and Player 1 now has 4
+          Player 0 now has 2 and Player 1 now has 7
+          Player 0 now has 10 and Player 1 now has 7
+          Player 0 takes the lead by 3
           """,
           'hidden': False,
           'locked': False
@@ -113,7 +85,6 @@ test = {
       'scored': True,
       'setup': r"""
       >>> from hog import play, always_roll, both, announce_lead_changes, say_scores
-      >>> from dice import make_test_dice
       """,
       'teardown': '',
       'type': 'doctest'

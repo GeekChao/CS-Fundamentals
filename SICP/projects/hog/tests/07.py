@@ -21,11 +21,6 @@ test = {
           >>> f9 = f8(75, 25) # Swap!
           >>> f10 = f9(50, 75) # Swap!
           50 points! That's the biggest gain yet for Player 1
-          >>> # The following function call checks if the behavior of f1 changes,
-          >>> # perhaps due to a side effect other than printing. The only side
-          >>> # effect of a commentary function should be to print.
-          >>> f2_again = f1(11, 1)
-          1 point! That's the biggest gain yet for Player 1
           """,
           'hidden': False,
           'locked': False
@@ -35,10 +30,10 @@ test = {
           >>> #
           >>> announce_both = both(announce_highest(0), announce_highest(1))
           >>> s0, s1 = play(always_roll(0), always_roll(0), goal=10, say=announce_both)
-          2 points! That's the biggest gain yet for Player 0
+          1 point! That's the biggest gain yet for Player 0
           2 points! That's the biggest gain yet for Player 1
-          6 points! That's the biggest gain yet for Player 1
-          10 points! That's the biggest gain yet for Player 0
+          3 points! That's the biggest gain yet for Player 1
+          8 points! That's the biggest gain yet for Player 0
           """,
           'hidden': False,
           'locked': False

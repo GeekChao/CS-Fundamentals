@@ -6,7 +6,7 @@ test = {
       'cases': [
         {
           'code': r"""
-          >>> swap_strategy(12, 60, 8, 6)
+          >>> swap_strategy(13, 60, 8, 6)
           962aea5f59fc55bd65ccacf4603c8f22
           # locked
           """,
@@ -24,7 +24,7 @@ test = {
         },
         {
           'code': r"""
-          >>> swap_strategy(7, 24, 8, 6)
+          >>> swap_strategy(7, 23, 8, 6)
           6
           """,
           'hidden': False,
@@ -32,7 +32,7 @@ test = {
         },
         {
           'code': r"""
-          >>> swap_strategy(7, 28, 8, 6)
+          >>> swap_strategy(7, 27, 8, 6)
           0
           """,
           'hidden': False,
@@ -58,7 +58,7 @@ test = {
       'cases': [
         {
           'code': r"""
-          >>> swap_strategy(10, 28, 8, 6) # beneficial
+          >>> swap_strategy(10, 38, 8, 6) # beneficial
           0
           """,
           'hidden': False,
@@ -74,8 +74,8 @@ test = {
         },
         {
           'code': r"""
-          >>> swap_strategy(44, 24, 8, 6)
-          6
+          >>> swap_strategy(35, 28, 8, 6)
+          0
           """,
           'hidden': False,
           'locked': False

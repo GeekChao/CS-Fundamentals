@@ -30,24 +30,6 @@ test = {
       """,
       'teardown': '',
       'type': 'doctest'
-    },
-    {
-      'cases': [
-        {
-          'answer': '5c489e1123a9d0cfdd0c26a27a56d42b',
-          'choices': [
-            'make_test_dice(6)',
-            'make_fair_dice(6)',
-            'six_sided',
-            'six_sided()'
-          ],
-          'hidden': False,
-          'locked': True,
-          'question': 'Which of the following is the correct way to "roll" a fair, six-sided die?'
-        }
-      ],
-      'scored': False,
-      'type': 'concept'
     }
   ]
 }

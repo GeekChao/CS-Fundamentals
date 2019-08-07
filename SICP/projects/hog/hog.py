@@ -26,10 +26,7 @@ def roll_dice(num_rolls, dice=six_sided):
 
 
 def free_bacon(score):
-    """Return the points scored from rolling 0 dice (Free Bacon).
-
-    score:  The opponent's current score.
-    """
+    """Return the points scored from rolling 0 dice (Free Bacon)."""
     assert score < 100, 'The game should be over.'
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
@@ -111,6 +108,7 @@ def say_scores(score0, score1):
     print("Player 0 now has", score0, "and Player 1 now has", score1)
     return say_scores
 
+
 def announce_lead_changes(previous_leader=None):
     """Return a commentary function that announces lead changes.
 
@@ -136,6 +134,7 @@ def announce_lead_changes(previous_leader=None):
         return announce_lead_changes(leader)
     return say
 
+
 def both(f, g):
     """Return a commentary function that says what f says, then what g says.
 
@@ -149,9 +148,9 @@ def both(f, g):
     Player 0 now has 6 and Player 1 now has 18
     Player 1 takes the lead by 12
     """
-    def say(score0, score1):
-        return both(f(score0, score1), g(score0, score1))
-    return say
+    # BEGIN PROBLEM 6
+    "*** YOUR CODE HERE ***"
+    # END PROBLEM 6
 
 
 def announce_highest(who, previous_high=0, previous_score=0):
@@ -199,7 +198,7 @@ def always_roll(n):
 
 
 def make_averaged(fn, num_samples=1000):
-    """Return a function that returns the average value of FN when called.
+    """Return a function that returns the average_value of FN when called.
 
     To implement this function, you will have to use *args syntax, a new Python
     feature introduced in this project.  See the project description.

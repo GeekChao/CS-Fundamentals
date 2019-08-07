@@ -25,7 +25,7 @@ test = {
         {
           'code': r"""
           >>> take_turn(0, 35)
-          edcbd82ba98a8122be244fa325c62071
+          327b19ffebddf93982e1ad2a4a6486f4
           # locked
           """,
           'hidden': False,
@@ -43,7 +43,7 @@ test = {
         {
           'code': r"""
           >>> take_turn(0, 7)
-          872dbe4a4fe5d8451aa842c21194c866
+          2aef307e1e3d3bb468f74013a49eb977
           # locked
           """,
           'hidden': False,
@@ -52,7 +52,7 @@ test = {
         {
           'code': r"""
           >>> take_turn(0, 0)
-          46caef5ffd6d72c8757279cbcf01b12f
+          43d176e102c8d95338faf8791aa509b3
           # locked
           """,
           'hidden': False,

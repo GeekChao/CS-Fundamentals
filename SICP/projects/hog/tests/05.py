@@ -1,6 +1,6 @@
 test = {
   'name': 'Question 5',
-  'points': 2,
+  'points': 3,
   'suites': [
     {
       'cases': [
@@ -15,21 +15,9 @@ test = {
           'hidden': False,
           'locked': True,
           'question': r"""
-          The variables score0 and score1 are the scores for Player 0
-          and Player 1, respectively. Under what conditions should the
-          game continue?
+          The variables score0 and score1 are the scores for both
+          players. Under what conditions should the game continue?
           """
-        },
-        {
-          'answer': 'bcda62bd369acb79a636e354f5ef2f48',
-          'choices': [
-            'The number of dice a player will roll',
-            'A function that returns the number of dice a player will roll',
-            "A player's desired turn outcome"
-          ],
-          'hidden': False,
-          'locked': True,
-          'question': 'What is a strategy in the context of this game?'
         },
         {
           'answer': '6092933b58b128fe246b574b1aa79389',
@@ -99,35 +87,6 @@ test = {
         {
           'code': r"""
           >>> #
-          >>> # Use strategies
-          >>> # We recommend working this out turn-by-turn on a piece of paper.
-          >>> strat0 = lambda score, opponent: opponent % 10
-          >>> strat1 = lambda score, opponent: score // 10
-          >>> s0, s1 = hog.play(strat0, strat1, score0=41, score1=80, dice=always_three)
-          >>> s0
-          54935d3cbce06ca8eb0a57a6afea0537
-          # locked
-          >>> s1
-          f621c71db7ab839a79f1a0339b73b7d5
-          # locked
-          """,
-          'hidden': False,
-          'locked': True
-        }
-      ],
-      'scored': True,
-      'setup': r"""
-      >>> import hog
-      >>> always_three = hog.make_test_dice(3)
-      """,
-      'teardown': '',
-      'type': 'doctest'
-    },
-    {
-      'cases': [
-        {
-          'code': r"""
-          >>> #
           >>> # Goal edge case
           >>> s0, s1 = hog.play(always(4), always(3), score0=88, score1=20, dice=always_three)
           >>> s0
@@ -184,9 +143,9 @@ test = {
           >>> # Free bacon refers to correct opponent score
           >>> s0, s1 = hog.play(always(0), always(0), score0=11, score1=99, dice=always_three)
           >>> s0
-          13
+          21
           >>> s1
-          103
+          102
           """,
           'hidden': False,
           'locked': False
@@ -195,11 +154,11 @@ test = {
           'code': r"""
           >>> #
           >>> # Handle multiple turns with many swaps
-          >>> s0, s1 = hog.play(always(0), always(2), goal=15, dice=always_three)
+          >>> s0, s1 = hog.play(always(0), always(0), goal=5, dice=always_three)
           >>> s0
-          16
-          >>> s1
           2
+          >>> s1
+          7
           """,
           'hidden': False,
           'locked': False
