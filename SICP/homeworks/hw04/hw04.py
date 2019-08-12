@@ -3,6 +3,7 @@ HW_SOURCE_FILE = 'hw04.py'
 ###############
 #  Questions  #
 ###############
+from math import sqrt, trunc
 
 def intersection(st, ave):
     """Represent an intersection using the Cantor pairing function."""
@@ -26,7 +27,10 @@ def taxicab(a, b):
     >>> taxicab(ess_a_bagel, times_square)
     9
     """
-    "*** YOUR CODE HERE ***"
+    sa, sb = street(a), street(b)
+    aa, ab = avenue(a), avenue(b)
+
+    return abs(sa - sb) + abs(aa - ab)
 
 def squares(s):
     """Returns a new list containing square roots of the elements of the
@@ -38,8 +42,13 @@ def squares(s):
     >>> seq = [500, 30]
     >>> squares(seq)
     []
-    """
-    "*** YOUR CODE HERE ***"
+    """   
+    squareLists = []
+    for ele in s:
+        temp = sqrt(ele)
+        if trunc(temp) == temp : squareLists.append(trunc(temp))
+
+    return squareLists
 
 def g(n):
     """Return the value of G(n), computed recursively.
@@ -58,7 +67,9 @@ def g(n):
     >>> check(HW_SOURCE_FILE, 'g', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    if n <= 3: return n
+
+    return g(n - 1) + 2 * g(n - 2) + 3 * g(n - 3)
 
 def g_iter(n):
     """Return the value of G(n), computed iteratively.
@@ -77,7 +88,15 @@ def g_iter(n):
     >>> check(HW_SOURCE_FILE, 'g_iter', ['Recursion'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    if n <= 3: return n
+    
+    i, a, b, c = 4, 3, 2, 1
+
+    while i <= n:
+        a, b, c = a + 2 * b + 3 * c, a, b
+        i += 1
+
+    return a
 
 def pingpong(n):
     """Return the nth element of the ping-pong sequence.
@@ -110,7 +129,16 @@ def pingpong(n):
     >>> check(HW_SOURCE_FILE, 'pingpong', ['Assign', 'AugAssign'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    def makeSeq(n, dire = 1):
+        if n <= 0: return 0
+
+        if has_seven(n):
+            return makeSeq(n - 1) + dire * -1
+        else:
+            return makeSeq(n - 1) + dire
+
+    return makeSeq(n)
+    
 
 def has_seven(k):
     """Returns True if at least one of the digits of k is a 7, False otherwise.
@@ -147,7 +175,30 @@ def count_change(amount):
     >>> count_change(100)
     9828
     """
-    "*** YOUR CODE HERE ***"
+    def coins(n):
+        if n == 0: return 0
+    
+        if n % 2 == 0:
+          return 1 + coins(n // 2)
+        else:
+          return coins(n - 1)
+
+    changes = coins(amount)
+
+    ways = 0
+    def count(total):
+        nonlocal ways 
+
+        if total == 0: ways += 1
+        elif total < 0: return
+
+        for change in range(1, changes + 1):
+            count(total - change)
+
+    count(amount)
+
+    return ways
+    
 
 ###################
 # Extra Questions #
