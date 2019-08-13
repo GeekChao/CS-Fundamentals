@@ -12,7 +12,9 @@ def if_this_not_that(i_list, this):
     4
     5
     """
-    "*** YOUR CODE HERE ***"
+    for i in i_list:
+        if i > this: print(i)
+        else: print("that")
 
 # Q4
 def make_city(name, lat, lon):
@@ -63,7 +65,7 @@ def distance(city1, city2):
     >>> distance(city3, city4)
     5.0
     """
-    "*** YOUR CODE HERE ***"
+    return sqrt(abs(get_lat(city1) - get_lat(city2)) ** 2 + abs(get_lon(city1) - get_lon(city2)) ** 2)
 
 # Q5
 def closer_city(lat, lon, city1, city2):
@@ -80,7 +82,8 @@ def closer_city(lat, lon, city1, city2):
     >>> closer_city(41.29, 174.78, bucharest, vienna)
     'Bucharest'
     """
-    "*** YOUR CODE HERE ***"
+    destination = make_city('Destination', lat, lon)
+    return get_name(city1) if distance(city1, destination) <= distance(city2, destination) else get_name(city2)
 
 # Connect N: Q6-11
 ######################
@@ -95,7 +98,7 @@ def create_row(size):
     ['-', '-', '-', '-', '-']
     """
     "*** YOUR CODE HERE ***"
-    return _______
+    return ['-' for i in range(1, size + 1)]
 
 
 def create_board(rows, columns):
@@ -105,7 +108,8 @@ def create_board(rows, columns):
     [['-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-']]
     """
     "*** YOUR CODE HERE ***"
-    return _______
+    row = create_row(columns)
+    return [row for i in range(1, rows + 1)]
 
 
 def replace_elem(lst, index, elem):
@@ -121,7 +125,7 @@ def replace_elem(lst, index, elem):
     """
     assert index >= 0 and index < len(lst), 'Index is out of bounds'
     "*** YOUR CODE HERE ***"
-    return _______
+    return 
 
 
 def get_piece(board, row, column):
