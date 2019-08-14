@@ -86,12 +86,25 @@ def num_songs(t):
     >>> num_songs(pytunes_simple)
     1
     """
-    def count_leaves(tree):
-        if is_leaf(tree): return 1
+    # def count_leaves(tree):
+    #     if is_leaf(tree): return 1
         
-        return sum([count_leaves(b) for b in branches(tree)])
+    #     return sum([count_leaves(b) for b in branches(tree)])
 
-    return count_leaves(t)
+    # return count_leaves(t)
+
+    sum = 0
+    def count_leaves(tree):
+      nonlocal sum
+      if is_leaf(tree): return 1
+          
+      for b in branches(tree):
+        sum = sum + count_leaves(b)
+      
+      return 0
+      
+    count_leaves(t)
+    return sum
 
 # Tree ADT
 # Tree definition
