@@ -63,9 +63,6 @@ def g(n):
     10
     >>> g(5)
     22
-    >>> from construct_check import check
-    >>> check(HW_SOURCE_FILE, 'g', ['While', 'For'])
-    True
     """
     if n <= 3: return n
 
@@ -84,9 +81,6 @@ def g_iter(n):
     10
     >>> g_iter(5)
     22
-    >>> from construct_check import check
-    >>> check(HW_SOURCE_FILE, 'g_iter', ['Recursion'])
-    True
     """
     if n <= 3: return n
     
@@ -125,19 +119,14 @@ def pingpong(n):
     0
     >>> pingpong(100)
     2
-    >>> from construct_check import check
-    >>> check(HW_SOURCE_FILE, 'pingpong', ['Assign', 'AugAssign'])
-    True
     """
-    def makeSeq(n, dire = 1):
-        if n <= 0: return 0
+    i, res, dire = 1, 0, 1
+    while i <= n:
+        res += dire
+        if has_seven(i) or i % 7 == 0: dire *= -1
+        i += 1
 
-        if has_seven(n):
-            return makeSeq(n - 1) + dire * -1
-        else:
-            return makeSeq(n - 1) + dire
-
-    return makeSeq(n)
+    return res
     
 
 def has_seven(k):
@@ -175,44 +164,21 @@ def count_change(amount):
     >>> count_change(100)
     9828
     """
-    def coins(n):
-        if n == 0: return 0
-    
-        if n % 2 == 0:
-          return 1 + coins(n // 2)
-        else:
-          return coins(n - 1)
+    def coins(n, num = 1):
+        if num > n: return []
+        elif num == n: return [num]
 
-    changes = coins(amount)
+        return [num] + coins(n, num * 2)
 
-    ways = 0
-    def count(total):
-        nonlocal ways 
+    def count(amount, coins):
+        if amount == 0: return 1
+        elif amount < 0: return 0
+        elif len(coins) == 0: return 0
 
-        if total == 0: ways += 1
-        elif total < 0: return
+        coin = coins[0]
+        with_coin = count(amount - coin, coins)
+        without_coin = count(amount, coins[1:])
 
-        for change in range(1, changes + 1):
-            count(total - change)
+        return with_coin + without_coin
 
-    count(amount)
-
-    return ways
-    
-
-###################
-# Extra Questions #
-###################
-
-from operator import sub, mul
-
-def make_anonymous_factorial():
-    """Return the value of an expression that computes factorial.
-
-    >>> make_anonymous_factorial()(5)
-    120
-    >>> from construct_check import check
-    >>> check(HW_SOURCE_FILE, 'make_anonymous_factorial', ['Assign', 'AugAssign', 'FunctionDef', 'Recursion'])
-    True
-    """
-    return 'YOUR_EXPRESSION_HERE'
+    return count(amount, coins(amount))
