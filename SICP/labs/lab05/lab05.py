@@ -99,7 +99,7 @@ def num_songs(t):
       if is_leaf(tree): return 1
           
       for b in branches(tree):
-        sum = sum + count_leaves(b)
+        sum = count_leaves(b) + sum
       
       return 0
       
