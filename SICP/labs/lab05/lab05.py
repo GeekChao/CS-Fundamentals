@@ -7,7 +7,7 @@ def map(fn, seq):
     >>> map(lambda x: x*x, [1, 2, 3])
     [1, 4, 9]
     """
-    "*** YOUR CODE HERE ***"
+    return [fn(ele) for ele in seq]
 
 def filter(pred, seq):
     """Keeps elements in seq only if they satisfy pred.
@@ -15,7 +15,7 @@ def filter(pred, seq):
     >>> filter(lambda x: x % 2 == 0, [1, 2, 3, 4])
     [2, 4]
     """
-    "*** YOUR CODE HERE ***"
+    return [ele for ele in seq if pred(ele)]
 
 def reduce(combiner, seq):
     """Combines elements in seq using combiner.
@@ -27,7 +27,10 @@ def reduce(combiner, seq):
     >>> reduce(lambda x, y: x * y, [4])
     4
     """
-    "*** YOUR CODE HERE ***"
+    accu = seq[0]
+    for ele in seq[1:]:
+        accu = combiner(accu, ele)
+    return accu
 
 # pyTunes
 def make_pytunes(username):
@@ -46,7 +49,32 @@ def make_pytunes(username):
         darude
           sandstorm
     """
-    "*** YOUR CODE HERE ***"
+    return tree(username,
+      [
+        tree('pop',
+          [
+            tree('justin bieber',
+              [
+                tree('single',
+                  [
+                    tree('what do you mean?')
+                  ]
+                )
+              ]),
+            tree('2015 pop mashup')
+          ]
+        ),
+        tree('trance',
+          [
+            tree('darude',
+              [
+                tree('sandstorm')
+              ]
+            )
+          ]
+        )
+      ]
+    )
 
 def num_songs(t):
     """Return the number of songs in the pyTunes tree, t.
@@ -58,7 +86,12 @@ def num_songs(t):
     >>> num_songs(pytunes_simple)
     1
     """
-    "*** YOUR CODE HERE ***"
+    def count_leaves(tree):
+        if is_leaf(tree): return 1
+        
+        return sum([count_leaves(b) for b in branches(tree)])
+
+    return count_leaves(t)
 
 # Tree ADT
 # Tree definition
