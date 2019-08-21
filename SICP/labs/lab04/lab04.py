@@ -125,7 +125,7 @@ def replace_elem(lst, index, elem):
     """
     assert index >= 0 and index < len(lst), 'Index is out of bounds'
     "*** YOUR CODE HERE ***"
-    return lst[1: index] + elem + lst[index + 1:]
+    return lst[0: index] + [elem] + lst[index + 1:]
 
 
 def get_piece(board, row, column):
@@ -199,6 +199,8 @@ def make_move(board, max_rows, max_cols, col, player):
     >>> row
     -1
     """
+    if col < 0: return -1, board
+
     return put_piece(board, max_rows, col, player)
 
 def print_board(board, max_rows, max_cols):
@@ -215,7 +217,7 @@ def print_board(board, max_rows, max_cols):
     X -
     """
     for row in board:
-        print([ele for ele in board[row]])
+        print(" ".join(row))
 
 def check_win_row(board, max_rows, max_cols, num_connect, row, player):
     """ Returns True if the given player has a horizontal win
@@ -310,10 +312,12 @@ def check_win(board, max_rows, max_cols, num_connect, row, col, player):
     >>> check_win(board, rows, columns, num_connect, 1, 0, 'X')
     True
     """
-    diagonal_win = check_win_diagonal(board, max_rows, max_cols, num_connect,
-                                      row, col, player)
-    "*** YOUR CODE HERE ***"
-    return _______
+
+    if check_win_diagonal(board, max_rows, max_cols, num_connect, row, col, player): return True
+    if check_win_row(board, max_rows, max_cols, num_connect, row, player): return True
+    if check_win_column(board, max_rows, max_cols, num_connect, col, player): return True
+
+    return False
 
 ###############################################################
 ### Functions for reference when solving the other problems ###
