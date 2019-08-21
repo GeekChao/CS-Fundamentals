@@ -92,7 +92,16 @@ def replace_leaf(t, old, new):
     >>> laerad == yggdrasil # Make sure original tree is unmodified
     True
     """
-    "*** YOUR CODE HERE ***"
+    def cloneWithNew(t):
+      if is_leaf(t):
+        if label(t) == old:
+            return tree(new)
+        else:
+            return t
+
+      return tree(label(t), [cloneWithNew(b) for b in branches(t)])
+
+    return cloneWithNew(t)
 
 def print_move(origin, destination):
     """Print instructions to move a disk."""
@@ -126,7 +135,14 @@ def move_stack(n, start, end):
     Move the top disk from rod 1 to rod 3
     """
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
-    "*** YOUR CODE HERE ***"
+
+    if n == 1: 
+      print_move(start, end)
+    else:
+      helper = 6 - start - end 
+      move_stack(n - 1, start, helper)
+      print_move(start, end)
+      move_stack(n - 1, helper, end)
 
 def interval(a, b):
     """Construct an interval from a to b."""
@@ -134,11 +150,11 @@ def interval(a, b):
 
 def lower_bound(x):
     """Return the lower bound of interval x."""
-    "*** YOUR CODE HERE ***"
+    return x[0]
 
 def upper_bound(x):
     """Return the upper bound of interval x."""
-    "*** YOUR CODE HERE ***"
+    return x[1]
 
 def str_interval(x):
     """Return a string representation of interval x."""
@@ -163,13 +179,17 @@ def mul_interval(x, y):
 def sub_interval(x, y):
     """Return the interval that contains the difference between any value in x
     and any value in y."""
-    "*** YOUR CODE HERE ***"
+    s1 = abs(x[0] - y[0])
+    s2 = abs(x[0] - y[1])
+    s3 = abs(x[1] - y[0])
+    s4 = abs(x[1] - y[1])
+    return [min(s1, s2, s3, s4), max(s1, s2, s3, s4)]
 
 def div_interval(x, y):
     """Return the interval that contains the quotient of any value in x divided by
     any value in y. Division is implemented as the multiplication of x by the
     reciprocal of y."""
-    "*** YOUR CODE HERE ***"
+    assert not upper_bound(y) == 0 and not lower_bound(y) == 0, 'divisor can not be zero'
     reciprocal_y = interval(1/upper_bound(y), 1/lower_bound(y))
     return mul_interval(x, reciprocal_y)
 
@@ -191,8 +211,8 @@ def check_par():
     >>> lower_bound(x) != lower_bound(y) or upper_bound(x) != upper_bound(y)
     True
     """
-    r1 = interval(1, 1) # Replace this line!
-    r2 = interval(1, 1) # Replace this line!
+    r1 = interval(2, 1) # Replace this line!
+    r2 = interval(1, 3) # Replace this line!
     return r1, r2
 
 def multiple_references_explanation():
@@ -207,7 +227,14 @@ def quadratic(x, a, b, c):
     >>> str_interval(quadratic(interval(1, 3), 2, -3, 1))
     '0 to 10'
     """
-    "*** YOUR CODE HERE ***"
+
+    extreme = -b / (2 * a)
+    f = lambda x: a * x * x + b * x + c
+    l, u, e = map(f, (lower_bound(x), upper_bound(x), extreme))
+    if extreme < lower_bound(x) or extreme > upper_bound(x):
+        return interval(min(l, u), max(l, u))
+    else:
+        return interval(min(l, u, e), max(l, u, e))
 
 def polynomial(x, c):
     """Return the interval that is the range of the polynomial defined by
@@ -220,5 +247,5 @@ def polynomial(x, c):
     >>> str_interval(polynomial(interval(0.5, 2.25), [10, 24, -6, -8, 3]))
     '18.0 to 23.0'
     """
-    "*** YOUR CODE HERE ***"
+    
 
