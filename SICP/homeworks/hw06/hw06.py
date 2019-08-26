@@ -44,7 +44,14 @@ class Account:
     def time_to_retire(self, amount):
         """Return the number of years until balance would grow to amount."""
         assert self.balance > 0 and amount > 0 and self.interest > 0
-        "*** YOUR CODE HERE ***"
+        if amount <= self.balance: return 0
+
+        num, new_balance = 0, self.balance
+        while new_balance > amount:
+            new_balance += new_balance * self.interest
+            num += 1
+
+        return num
 
 class FreeChecking(Account):
     """A bank account that charges for withdrawals, but the first two are free!
@@ -73,7 +80,14 @@ class FreeChecking(Account):
     withdraw_fee = 1
     free_withdrawals = 2
 
-    "*** YOUR CODE HERE ***"
+    def __init__(self):
+        super()
+        self.num_withdrawals = 0
+
+    def withdraw(self, amount):
+        self.num_withdrawals += 1
+        super.withdraw(amount) if self.num_withdrawals <= self.free_withdrawals else super.withdraw(amount + self.withdraw_fee)
+
 
 ###########
 # Mobiles #
@@ -133,15 +147,15 @@ def end(s):
 def weight(size):
     """Construct a weight of some size."""
     assert size > 0
-    "*** YOUR CODE HERE ***"
+    return tree(size)
 
 def size(w):
     """Select the size of a weight."""
-    "*** YOUR CODE HERE ***"
+    return length(w)
 
 def is_weight(w):
     """Whether w is a weight, not a mobile."""
-    "*** YOUR CODE HERE ***"
+    return is_leaf(w)
 
 def examples():
     t = mobile(side(1, weight(2)),
@@ -185,8 +199,24 @@ def balanced(m):
     >>> balanced(mobile(side(1, w), side(1, v)))
     False
     """
-    "*** YOUR CODE HERE ***"
+    def hasSameTorque(m):
+        if is_weight(m): return True
 
+        l_side, r_side = end(m), sides(m)[1]
+        l_rod_len, r_rod_len = length(l_side), length(r_side)
+
+        return l_rod_len * with_totals(l_side) == r_rod_len * with_totals(r_side)
+
+    def travseCheck(m):
+        if hasSameTorque(m):
+            for b in sides(m):
+                if not travseCheck(b): return False
+            return True
+        else:
+            return False
+            
+    return travseCheck(m)
+    
 def with_totals(m):
     """Return a mobile with total weights stored as the label of each mobile.
 
@@ -202,7 +232,10 @@ def with_totals(m):
     >>> [label(end(s)) for s in sides(v)]         # v should not change
     [None, None]
     """
-    "*** YOUR CODE HERE ***"
+    if is_weight(m):
+        return label(m)
+    
+    return sum([with_totals(b) for b in sides(m)])
 
 ############
 # Mutation #
