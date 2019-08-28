@@ -5,6 +5,7 @@ class Player(object):
         """Create a player object."""
         self.name = name
         self.place = place
+        self.backpack = []
 
     def look(self):
         self.place.look()
@@ -33,10 +34,13 @@ class Player(object):
         You are at GBC
         """
         destination_place = self.place.get_neighbor(location)
+
         if destination_place.locked:
             print(destination_place.name, 'is locked! Go look for a key to unlock it')
-        "*** YOUR CODE HERE ***"
+        else:   
+            self.place = destination_place
 
+        print('You are at {0}'.format(destination_place.name))
 
     def talk_to(self, person):
         """Talk to person if person is at player's current place.
@@ -51,10 +55,14 @@ class Player(object):
         >>> me.talk_to('Tiffany')
         Tiffany is not here.
         """
+        characters = self.place.characters
         if type(person) != str:
             print('Person has to be a string.')
-        "*** YOUR CODE HERE ***"
-
+        else:
+            if person in characters:
+                print('{0} says: {1}'.format(person, characters[person].talk()))
+            else:
+                print('{0} is not here.'.format(person))
 
     def take(self, thing):
         """Take a thing if thing is at player's current place
@@ -77,9 +85,16 @@ class Player(object):
         >>> len(me.backpack)
         1
         """
+        things = self.place.things
         if type(thing) != str:
             print('Thing should be a string.')
-        "*** YOUR CODE HERE ***"
+        else:
+            if thing in things:
+                self.backpack.append(things[thing])
+                del things[thing]
+                print('Player takes the {0}'.format(thing))
+            else:
+                print('{0} is not here.'.format(thing))
 
     def check_backpack(self):
         """Print each item with its description and return a list of item names.
@@ -151,8 +166,15 @@ class Player(object):
         for item in self.backpack:
             if type(item) == Key:
                 key = item
-        "*** YOUR CODE HERE ***"
 
+        next_place = self.place.get_neighbor(place)
+        if next_place.locked == False:
+            print(place, 'is already unlocked!')
+        elif key:
+            key.use(next_place)
+            print(place, 'is now unlocked!')
+        else:
+            print(place, "can't be unlocked without a key!")  # These parts can also be moved to Key's method use
 
 class Character(object):
     def __init__(self, name, message):
@@ -171,7 +193,9 @@ class Thing(object):
     def use(self, place):
         print("You can't use a {0} here".format(self.name))
 
-""" Implement Key here! """
+class Key(Thing):
+    def use(self, place):
+        place.locked = False
 
 class Treasure(Thing):
     def __init__(self, name, description, value, weight):
