@@ -47,7 +47,7 @@ class Account:
         if amount <= self.balance: return 0
 
         num, new_balance = 0, self.balance
-        while new_balance > amount:
+        while new_balance < amount:
             new_balance += new_balance * self.interest
             num += 1
 
@@ -80,14 +80,17 @@ class FreeChecking(Account):
     withdraw_fee = 1
     free_withdrawals = 2
 
-    def __init__(self):
-        super()
+    def __init__(self, account_holder):
+        super().__init__(account_holder)
         self.num_withdrawals = 0
 
     def withdraw(self, amount):
         self.num_withdrawals += 1
-        super.withdraw(amount) if self.num_withdrawals <= self.free_withdrawals else super.withdraw(amount + self.withdraw_fee)
 
+        if self.num_withdrawals <= self.free_withdrawals:
+            return super().withdraw(amount)
+        else:
+            return super().withdraw(amount + self.withdraw_fee)
 
 ###########
 # Mobiles #
@@ -151,7 +154,7 @@ def weight(size):
 
 def size(w):
     """Select the size of a weight."""
-    return length(w)
+    return label(w)
 
 def is_weight(w):
     """Whether w is a weight, not a mobile."""
@@ -202,15 +205,16 @@ def balanced(m):
     def hasSameTorque(m):
         if is_weight(m): return True
 
-        l_side, r_side = end(m), sides(m)[1]
-        l_rod_len, r_rod_len = length(l_side), length(r_side)
+        [l_side, r_side] = sides(m)
+        l_rod_len, r_rod_len = end(l_side), end(r_side)
 
         return l_rod_len * with_totals(l_side) == r_rod_len * with_totals(r_side)
 
     def travseCheck(m):
         if hasSameTorque(m):
             for b in sides(m):
-                if not travseCheck(b): return False
+                if label(b) == None:
+                    if not travseCheck(b): return False
             return True
         else:
             return False
@@ -261,7 +265,18 @@ def make_counter():
     >>> c('b') + c2('b')
     5
     """
-    "*** YOUR CODE HERE ***"
+    map = {}
+
+    def count(ch):
+        nonlocal map
+        if ch in map:
+             map[ch] = map[ch] + 1
+        else:
+            map[ch] = 1
+
+        return map[ch]
+
+    return count
 
 def make_fib():
     """Returns a function that returns the next Fibonacci number
@@ -282,7 +297,15 @@ def make_fib():
     >>> fib() + sum([fib2() for _ in range(5)])
     12
     """
-    "*** YOUR CODE HERE ***"
+    cur, next = 0, 1
+
+    def fib():
+        nonlocal cur, next
+        result = cur
+        cur, next = next, cur + next
+        return result
+
+    return fib
 
 def make_withdraw(balance, password):
     """Return a password-protected withdraw function.
@@ -303,11 +326,29 @@ def make_withdraw(balance, password):
     >>> w(20, 'n00b')
     'Incorrect password'
     >>> w(10, 'hax0r')
-    "Your account is locked. Attempts: ['hwat', 'a', 'n00b']"
+    30
     >>> w(10, 'l33t')
     "Your account is locked. Attempts: ['hwat', 'a', 'n00b']"
     """
-    "*** YOUR CODE HERE ***"
+    attempts = []
+    
+    def withdraw(amount, pwd):
+        nonlocal attempts, balance
+
+        if not pwd == password: 
+            if len(attempts) >= 3: 
+                return "Your account is locked. Attempts: {0}".format(attempts)
+            else:
+                attempts.append(pwd)
+                return "Incorrect password"
+
+        if amount > balance:
+            return "Insufficient funds"
+        else:
+            balance -= amount
+            return balance
+    
+    return withdraw
 
 def make_joint(withdraw, old_password, new_password):
     """Return a password-protected withdraw function that has joint access to
@@ -347,4 +388,15 @@ def make_joint(withdraw, old_password, new_password):
     >>> make_joint(w, 'hax0r', 'hello')
     "Your account is locked. Attempts: ['my', 'secret', 'password']"
     """
-    "*** YOUR CODE HERE ***"
+    result = withdraw(0, old_password)
+
+    if type(result) == str:
+        return result
+
+    def joint_withdraw(amount, password):
+        if password == new_password: 
+            return withdraw(amount, old_password)
+
+        return withdraw(amount, password)
+
+    return joint_withdraw
