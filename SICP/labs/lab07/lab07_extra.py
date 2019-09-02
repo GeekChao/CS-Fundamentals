@@ -10,7 +10,16 @@ def cumulative_sum(t):
     >>> t
     Tree(16, [Tree(8, [Tree(5)]), Tree(7)])
     """
-    "*** YOUR CODE HERE ***"
+    def traverse(t):
+        if t.is_leaf():
+            return t
+
+        total = sum(map(lambda t: t.label, [traverse(b) for b in t.branches]))
+        t.label = t.label + total
+
+        return t
+    
+    traverse(t)
 
 # Q7
 def reverse_other(t):
@@ -24,8 +33,22 @@ def reverse_other(t):
     >>> reverse_other(t)
     >>> t
     Tree(1, [Tree(3, [Tree(5, [Tree(8), Tree(7)]), Tree(6)]), Tree(2)])
-    """
-    "*** YOUR CODE HERE ***"
+    """ 
+    def traverse(t, depth = 1):
+        if t.is_leaf(): return 
+        
+        for b in t.branches:
+            traverse(b, depth + 1)
+
+        if depth % 2 == 1:
+            i, length = 0, len(t.branches) - 1
+            while i <= length / 2:
+                couter = length - i
+                if couter != i:
+                    t.branches[couter].label, t.branches[i].label = t.branches[i].label, t.branches[couter].label
+                i += 1
+
+    traverse(t)
 
 # Q8
 def deep_map_mut(fn, link):
@@ -40,7 +63,14 @@ def deep_map_mut(fn, link):
     >>> print(link1)
     <9 <16> 25 36>
     """
-    "*** YOUR CODE HERE ***"
+    cur = link
+    while cur is not Link.empty:
+        if isinstance(cur.first, Link):
+            cur.first.first = fn(cur.first.first)
+        else:
+            cur.first = fn(cur.first)
+
+        cur = cur.rest
 
 # Q9
 def has_cycle(link):
@@ -57,7 +87,14 @@ def has_cycle(link):
     >>> has_cycle(u)
     False
     """
-    "*** YOUR CODE HERE ***"
+    cur, track = link, []
+    while cur is not Link.empty:
+        if cur in track: return True
+
+        track.append(cur)
+        cur = cur.rest
+
+    return False
 
 def has_cycle_constant(link):
     """Return whether link contains a cycle.
@@ -70,4 +107,15 @@ def has_cycle_constant(link):
     >>> has_cycle_constant(t)
     False
     """
-    "*** YOUR CODE HERE ***"
+# Official solution
+    if link is Link.empty:
+        return False
+    slow, fast = link, link.rest
+    while fast is not Link.empty:
+        if fast.rest == Link.empty:
+            return False
+        elif fast == slow or fast.rest == slow:
+            return True
+        else:
+            slow, fast = slow.rest, fast.rest.rest
+    return False

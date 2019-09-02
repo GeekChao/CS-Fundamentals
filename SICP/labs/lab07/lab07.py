@@ -7,8 +7,17 @@ def list_to_link(lst):
     >>> link = list_to_link([1, 2, 3])
     >>> print(link)
     <1 2 3>
-    """
-    "*** YOUR CODE HERE ***"
+    """    
+    if len(lst) == 0: 
+       return Link.empty
+    
+    def construct_list(i):
+        if i == len(lst) - 1:
+            return Link(lst[i])
+        
+        return Link(lst[i], construct_list(i + 1))
+
+    return construct_list(0)
 
 # Q3
 def link_to_list(link):
@@ -20,7 +29,15 @@ def link_to_list(link):
     >>> link_to_list(Link.empty)
     []
     """
-    "*** YOUR CODE HERE ***"
+    if len(link) == 0:
+        return []
+
+    index, lst = 0, []
+    while index < len(link):
+        lst.append(link[index])
+        index += 1
+        
+    return lst
 
 # Q4
 def remove_all(link , value):
@@ -37,8 +54,15 @@ def remove_all(link , value):
     >>> print(l1)
     <0 1>
     """
-    "*** YOUR CODE HERE ***"
+    cur, next = link, link.rest
 
+    while next is not Link.empty:
+        if next.first == value:
+            cur.rest, next.rest = next.rest, Link.empty
+            next = cur.rest
+        else:  
+            cur, next = next, next.rest
+    
 # Linked List Class
 class Link:
     """A linked list.
