@@ -11,24 +11,16 @@ def deep_len(lnk):
     >>> deep_len(levels)
     5
     """
-
-    sum = 0
     def deep(lst):
-      nonlocal sum
-
       if lst is Link.empty:
-        return 
+        return 0
 
       if isinstance(lst.first, Link):
-        deep(lst.first) 
-        deep(lst.rest)
+        return deep(lst.first) + deep(lst.rest)
       else:
-        sum += 1
-        deep(lst.rest)
+        return 1 + deep(lst.rest)
       
-    deep(lnk)
-    
-    return sum
+    return deep(lnk)
 
 # def make_to_string(front, mid, back, empty_repr):
 #     """ Returns a function that turns linked lists to strings.
