@@ -20,17 +20,26 @@ class Keyboard:
     """
 
     def __init__(self, *args):
-        "*** YOUR CODE HERE ***"
+        self.buttons = {}
+
+        for btn in args:
+            self.buttons[btn.pos] = btn
 
     def press(self, info):
         """Takes in a position of the button pressed, and
         returns that button's output"""
-        "*** YOUR CODE HERE ***"
+        self.buttons[info].pressed += 1
+        return self.buttons[info].key 
 
     def typing(self, typing_input):
         """Takes in a list of positions of buttons pressed, and
         returns the total output"""
-        "*** YOUR CODE HERE ***"
+        string = ''
+        for pos in typing_input:
+            self.buttons[pos].pressed += 1
+            string += self.buttons[pos].key
+
+        return string
 
 class Button:
     def __init__(self, pos, key):
@@ -67,7 +76,29 @@ def make_advanced_counter_maker():
     >>> tom_counter('global-count')
     1
     """
-    "*** YOUR CODE HERE ***"
+    globalCounter = 0
+
+    def make_counter():
+        nonlocal globalCounter
+        counter = 0
+
+        def counterFn(action):
+            nonlocal counter, globalCounter
+
+            if action == 'count':
+                counter += 1
+                return counter
+            elif action == 'reset':
+                counter = 0
+            elif action == 'global-count':
+                globalCounter += 1
+                return globalCounter
+            elif action == 'global-reset':
+                globalCounter = 0
+
+        return counterFn
+    
+    return make_counter
 
 def trade(first, second):
     """Exchange the smallest prefixes of first and second that have equal sum.
@@ -97,10 +128,16 @@ def trade(first, second):
     [4, 3, 1, 4, 1]
     """
     m, n = 1, 1
+    while m <= len(first) and n <= len(second):
+        sumM, sumN = sum(first[:m]), sum(second[:n])
+        if sumM > sumN:
+            n += 1
+        elif sumM < sumN:
+            m += 1
+        else:
+            break 
 
-    "*** YOUR CODE HERE ***"
-
-    if False: # change this line!
+    if m <= len(first) and n <= len(second): # change this line!
         first[:m], second[:n] = second[:n], first[:m]
         return 'Deal!'
     else:

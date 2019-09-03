@@ -22,83 +22,98 @@ def deep_len(lnk):
       
     return deep(lnk)
 
-# def make_to_string(front, mid, back, empty_repr):
-#     """ Returns a function that turns linked lists to strings.
+def make_to_string(front, mid, back, empty_repr):
+    """ Returns a function that turns linked lists to strings.
 
-#     >>> kevins_to_string = make_to_string("[", "|-]-->", "", "[]")
-#     >>> jerrys_to_string = make_to_string("(", " . ", ")", "()")
-#     >>> lst = Link(1, Link(2, Link(3, Link(4))))
-#     >>> kevins_to_string(lst)
-#     '[1|-]-->[2|-]-->[3|-]-->[4|-]-->[]'
-#     >>> kevins_to_string(Link.empty)
-#     '[]'
-#     >>> jerrys_to_string(lst)
-#     '(1 . (2 . (3 . (4 . ()))))'
-#     >>> jerrys_to_string(Link.empty)
-#     '()'
-#     """
+    >>> kevins_to_string = make_to_string("[", "|-]-->", "", "[]")
+    >>> jerrys_to_string = make_to_string("(", " . ", ")", "()")
+    >>> lst = Link(1, Link(2, Link(3, Link(4))))
+    >>> kevins_to_string(lst)
+    '[1|-]-->[2|-]-->[3|-]-->[4|-]-->[]'
+    >>> kevins_to_string(Link.empty)
+    '[]'
+    >>> jerrys_to_string(lst)
+    '(1 . (2 . (3 . (4 . ()))))'
+    >>> jerrys_to_string(Link.empty)
+    '()'
+    """
+    def format(lst):
+        if lst is Link.empty:
+            return empty_repr
+        
+        return front + str(lst.first) + mid + format(lst.rest) + back
+
+    return format
+
+def tree_map(fn, t):
+    """Maps the function fn over the entries of t and returns the
+    result in a new tree.
+
+    >>> numbers = Tree(1,
+    ...                [Tree(2,
+    ...                      [Tree(3),
+    ...                       Tree(4)]),
+    ...                 Tree(5,
+    ...                      [Tree(6,
+    ...                            [Tree(7)]),
+    ...                       Tree(8)])])
+    >>> print(tree_map(lambda x: 2**x, numbers))
+    2
+      4
+        8
+        16
+      32
+        64
+          128
+        256
+    """
+    def traverse(t):
+        if isinstance(t, Tree):
+            t.label = fn(t.label)
+        
+        for b in t.branches:
+            traverse(b)
+
+    traverse(t)
+
+    return t
+
+def add_trees(t1, t2):
+    """
+    >>> numbers = Tree(1,
+    ...                [Tree(2,
+    ...                      [Tree(3),
+    ...                       Tree(4)]),
+    ...                 Tree(5,
+    ...                      [Tree(6,
+    ...                            [Tree(7)]),
+    ...                       Tree(8)])])
+    >>> print(add_trees(numbers, numbers))
+    2
+      4
+        6
+        8
+      10
+        12
+          14
+        16
+    >>> print(add_trees(Tree(2), Tree(3, [Tree(4), Tree(5)])))
+    5
+      4
+      5
+    >>> print(add_trees(Tree(2, [Tree(3)]), Tree(2, [Tree(3), Tree(4)])))
+    4
+      6
+      4
+    >>> print(add_trees(Tree(2, [Tree(3, [Tree(4), Tree(5)])]), \
+    Tree(2, [Tree(3, [Tree(4)]), Tree(5)])))
+    4
+      6
+        8
+        5
+      5
+    """
     
-
-# def tree_map(fn, t):
-#     """Maps the function fn over the entries of t and returns the
-#     result in a new tree.
-
-#     >>> numbers = Tree(1,
-#     ...                [Tree(2,
-#     ...                      [Tree(3),
-#     ...                       Tree(4)]),
-#     ...                 Tree(5,
-#     ...                      [Tree(6,
-#     ...                            [Tree(7)]),
-#     ...                       Tree(8)])])
-#     >>> print(tree_map(lambda x: 2**x, numbers))
-#     2
-#       4
-#         8
-#         16
-#       32
-#         64
-#           128
-#         256
-#     """
-#     "*** YOUR CODE HERE ***"
-
-# def add_trees(t1, t2):
-#     """
-#     >>> numbers = Tree(1,
-#     ...                [Tree(2,
-#     ...                      [Tree(3),
-#     ...                       Tree(4)]),
-#     ...                 Tree(5,
-#     ...                      [Tree(6,
-#     ...                            [Tree(7)]),
-#     ...                       Tree(8)])])
-#     >>> print(add_trees(numbers, numbers))
-#     2
-#       4
-#         6
-#         8
-#       10
-#         12
-#           14
-#         16
-#     >>> print(add_trees(Tree(2), Tree(3, [Tree(4), Tree(5)])))
-#     5
-#       4
-#       5
-#     >>> print(add_trees(Tree(2, [Tree(3)]), Tree(2, [Tree(3), Tree(4)])))
-#     4
-#       6
-#       4
-#     >>> print(add_trees(Tree(2, [Tree(3, [Tree(4), Tree(5)])]), \
-#     Tree(2, [Tree(3, [Tree(4)]), Tree(5)])))
-#     4
-#       6
-#         8
-#         5
-#       5
-#     """
-#     "*** YOUR CODE HERE ***"
 
 # Link
 class Link:
