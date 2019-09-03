@@ -1,18 +1,21 @@
 {
     "name": "Homework 8",
-    "endpoint": "cal/CS61A/sp15/hw8",
+    "endpoint": "cal/cs61a/fa17/hw08",
     "src": [
-        "hw08.scm"
+        "hw08.py"
     ],
     "tests": {
-        "tests/deep-map.py": "ok_test",
-        "tests/substitute.py": "ok_test",
-        "tests/sub-all.py": "ok_test"
+        "hw08.py": "doctest"
     },
+    "default_tests": [
+        "survey"
+    ],
     "protocols": [
+        "restore",
         "file_contents",
         "unlock",
         "grading",
-        "analytics"
+        "analytics",
+        "backup"
     ]
 }
