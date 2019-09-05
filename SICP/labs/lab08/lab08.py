@@ -113,7 +113,21 @@ def add_trees(t1, t2):
         5
       5
     """
-    
+    #official solution
+    if t1.is_leaf():
+        return Tree(t1.label + t2.label, t2.branches)
+    elif t2.is_leaf():
+        return Tree(t1.label + t2.label, t1.branches)
+    else:
+        len1 = len(t1.branches)
+        len2 = len(t2.branches)
+        new_branches = [add_trees(x, y) for x, y in zip(t1.branches, t2.branches)]
+        if len1 == len2:
+            return Tree(t1.label + t2.label, new_branches)
+        elif len1 < len2:
+            return Tree(t1.label + t2.label, new_branches + t2.branches[len1:])
+        elif len1 > len2:
+            return Tree(t1.label + t2.label, new_branches + t1.branches[len2:])
 
 # Link
 class Link:
