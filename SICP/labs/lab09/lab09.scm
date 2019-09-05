@@ -2,7 +2,11 @@
 
 ; Q2
 (define (over-or-under x y)
-  'YOUR-CODE-HERE
+  (cond 
+      ((> x y) 1)
+      ((< x y) -1)
+      (else 0)
+  )
 )
 
 ;;; Tests
@@ -15,18 +19,28 @@
 
 ; Q3
 (define (filter f lst)
-  'YOUR-CODE-HERE
+  (define (iterate lst)
+      (if (null? lst) 
+        lst
+        (if (not (f (car lst))) 
+          (iterate (cdr lst))
+          (cons (car lst) (iterate (cdr lst)))
+        ) 
+      )
+  )
+
+  (iterate lst)
 )
 
 ;;; Tests
 (define (even? x)
   (= (modulo x 2) 0))
-(filter even? '(0 1 1 2 3 5 8))
+(filter even? '(0 1 1 2 3 5 8 9))
 ; expect (0 2 8)
 
 ; Q4
 (define (make-adder num)
-  'YOUR-CODE-HERE
+  (lambda (x) (+ x num))
 )
 
 ;;; Tests

@@ -3,17 +3,25 @@
 
 ; Q5
 (define lst
-  'YOUR-CODE-HERE
+  (list (list 1) 2 (cons 3 4) 5)
 )
 
 ; Q6
 (define (composed f g)
-  'YOUR-CODE-HERE
+  (define (h (x))
+    (f (g x))
+  )
 )
 
 ; Q7
 (define (remove item lst)
-  'YOUR-CODE-HERE
+  (if (null? lst) 
+    lst
+    (if (= (car lst) item)
+      (remove item (cdr lst))
+      (cons (car lst) (remove item (cdr lst)))
+    )
+  )
 )
 
 
