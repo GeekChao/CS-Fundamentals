@@ -2,29 +2,47 @@
   (cdr (cdr s)))
 
 (define (cadr s)
-  'YOUR-CODE-HERE
+  (car (cdr s))
 )
 
 (define (caddr s)
-  'YOUR-CODE-HERE
+  (car (cdr (cdr s)))
 )
 
 (define (sign x)
-  'YOUR-CODE-HERE
+  (cond
+    ((> x 0) 1)
+    ((< x 0) -1)
+    ((= x 0) 0)
+  )
 )
 
 (define (square x) (* x x))
 
 (define (pow b n)
-  'YOUR-CODE-HERE
+  (if (= n 0)
+    1
+    (if (even? n)
+      (square (pow b (/ n 2)))
+      (* b (pow b (- n 1)))
+    )
+  )
 )
 
 (define (ordered? s)
-  'YOUR-CODE-HERE
+  (define cur (car s))
+  (define next (cadr s))
+
+  (if (null? next)
+    True
+    (if (> cur next)
+      False
+      (ordered? (cdr s))
+    )
+  )
 )
 
 (define (nodots s)
-  'YOUR-CODE-HERE
 )
 
 ; Sets as sorted lists
@@ -33,8 +51,9 @@
 
 (define (contains? s v)
     (cond ((empty? s) #f)
-          'YOUR-CODE-HERE
-          (else nil) ; replace this line
+          ((> (car s) v) #f)
+          ((= (car s) v) #t)
+          (else (contains? (cdr s) v)) ; replace this line
           ))
 
 ; Equivalent Python code, for your reference:
@@ -53,15 +72,16 @@
 ;         return contains(s.rest, v)
 
 (define (add s v)
-    (cond ((empty? s) (list v))
-          'YOUR-CODE-HERE
-          (else nil) ; replace this line
+    (cond ((empty? s) (list v s))
+          ((> (car s) v) (cons (list v (car s)) (add (cdr s) v))
+          (else (cons (car s) (add (cdr s) v))) ; replace this line
           ))
 
 (define (intersect s t)
     (cond ((or (empty? s) (empty? t)) nil)
-          'YOUR-CODE-HERE
-          (else nil) ; replace this line
+          ((> (car s) (car t)) (intersect s (cdr t)))
+          ((< (car s) (car t)) (intersect (cdr t) s))
+          (else (= (car s) (car t)) (cons (car s) (intersect (cdr s) (cdr t))) ; replace this line
           ))
 
 ; Equivalent Python code, for your reference:
@@ -81,6 +101,7 @@
 (define (union s t)
     (cond ((empty? s) t)
           ((empty? t) s)
-          'YOUR-CODE-HERE
-          (else nil) ; replace this line
+          ((> (car s) (car t)) (cons (car t) (union s (cdr t))))
+          ((< (car s) (car t)) (cons (car s) (union (cdr t) s)))
+          (else (= (car s) (car t)) (cons (car s) (union (cdr s) (cdr t))) ; replace this line
           ))
