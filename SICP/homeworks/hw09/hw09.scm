@@ -6,7 +6,7 @@
 )
 
 (define (caddr s)
-  (car (cdr (cdr s)))
+  (car (cddr s))
 )
 
 (define (sign x)
@@ -23,8 +23,8 @@
   (if (= n 0)
     1
     (if (even? n)
-      (square (pow b (/ n 2)))
-      (* b (pow b (- n 1)))
+      (pow (square b) (/ n 2))
+      (* b (pow (square b) (/ (- n 1) 2)))
     )
   )
 )
@@ -33,7 +33,7 @@
   (define cur (car s))
   (define next (cadr s))
 
-  (if (null? next)
+  (if (or (null? next) (null? s))
     True
     (if (> cur next)
       False
@@ -42,8 +42,15 @@
   )
 )
 
+; Official solution
 (define (nodots s)
-)
+  (define (dotted s) (and (pair? s)
+                          (not (or (pair? (cdr s))
+                                   (null? (cdr s))))))
+  (cond ((null? s) s)
+        ((dotted s) (list (nodots (car s)) (cdr s)))
+        ((pair? s) (cons (nodots (car s)) (nodots (cdr s))))
+        (else s))
 
 ; Sets as sorted lists
 
@@ -80,7 +87,7 @@
 (define (intersect s t)
     (cond ((or (empty? s) (empty? t)) nil)
           ((> (car s) (car t)) (intersect s (cdr t)))
-          ((< (car s) (car t)) (intersect (cdr t) s))
+          ((< (car s) (car t)) (intersect (cdr s) t))
           (else (= (car s) (car t)) (cons (car s) (intersect (cdr s) (cdr t))) ; replace this line
           ))
 
@@ -102,6 +109,6 @@
     (cond ((empty? s) t)
           ((empty? t) s)
           ((> (car s) (car t)) (cons (car t) (union s (cdr t))))
-          ((< (car s) (car t)) (cons (car s) (union (cdr t) s)))
+          ((< (car s) (car t)) (cons (car s) (union (cdr s) t)))
           (else (= (car s) (car t)) (cons (car s) (union (cdr s) (cdr t))) ; replace this line
           ))
