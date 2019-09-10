@@ -1,14 +1,14 @@
 (define (how-many-dots s)
-  'YOUR-CODE-HERE
-)
-
-(define (substitute s old new)
-  'YOUR-CODE-HERE
-)
-
-
-(define (sub-all s olds news)
-  'YOUR-CODE-HERE
+  (define (dotted s) (and (pair? s)
+                          (not (or (pair? (cdr s))
+                                   (null? (cdr s))))))
+  (if (null? s) 
+    0
+    (if (dots (car s))
+      (+ 1 (how-many-dots (cdr s)))
+      (how-many-dots (cdr s))
+    )
+  )
 )
 
 (define (cadr s) (car (cdr s)))
@@ -57,11 +57,13 @@
 (define (multiplicand p) (caddr p))
 
 (define (derive-sum expr var)
-  'YOUR-CODE-HERE
+  (make-sum (derive (addend expr) var) (derive (augend expr) var))
 )
 
 (define (derive-product expr var)
-  'YOUR-CODE-HERE
+ (make-sum
+  (make-product (derive (addend expr) var) (augend expr))
+  (make-product (addend expr) (derive (augend expr) var)))
 )
 
 ; Exponentiations are represented as lists that start with ^.
