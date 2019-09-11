@@ -111,6 +111,9 @@ class Name(Expr):
         Exception raised!
         """
         "*** YOUR CODE HERE ***"
+        if self.string in env:
+            return env[self.string]
+        raise NameError
 
     def __str__(self):
         return self.string
@@ -177,6 +180,17 @@ class CallExpr(Expr):
         Number(14)
         """
         "*** YOUR CODE HERE ***"
+        def eval_expr(expr):
+            if isinstance(expr, Literal) or isinstance(expr, Name) or isinstance(expr, LambdaExpr):
+                return expr.eval(env)
+            elif isinstance(expr, CallExpr):
+                operator = eval_expr(expr.operator)
+                operands = [eval_expr(arg) for arg in expr.operands]
+                return operator.apply(operands)
+            else:
+                raise TypeError
+
+        return eval_expr(self)
 
     def __str__(self):
         function = str(self.operator)
