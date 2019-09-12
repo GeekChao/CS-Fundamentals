@@ -16,7 +16,18 @@ def hailstone(n):
     2
     1
     """
-    "*** YOUR CODE HERE ***"
+    try:
+        if n == 1:
+            yield 1
+        elif n % 2 == 0:
+            yield n // 2
+            hailstone(n // 2)
+        else:
+            yield n * 3 + 1
+            hailstone(n * 3 + 1)
+
+    except StopIteration:
+        pass
 
 # Q7
 def repeated(t, k):
@@ -31,7 +42,15 @@ def repeated(t, k):
     None
     """
     assert k > 1
-    "*** YOUR CODE HERE ***"
+    dict = {}
+
+    for ele in t:
+        if ele in dict:
+            dict[ele] += 1
+            if dict[ele] == k:
+                return ele
+        else:
+            dict[ele] = 1
 
 # Q8
 def merge(s0, s1):
