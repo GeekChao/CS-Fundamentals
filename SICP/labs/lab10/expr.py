@@ -113,7 +113,7 @@ class Name(Expr):
         "*** YOUR CODE HERE ***"
         if self.string in env:
             return env[self.string]
-        raise NameError
+        raise NameError("{} is not defined".format(self.string))
 
     def __str__(self):
         return self.string
@@ -180,17 +180,9 @@ class CallExpr(Expr):
         Number(14)
         """
         "*** YOUR CODE HERE ***"
-        def eval_expr(expr):
-            if isinstance(expr, Literal) or isinstance(expr, Name) or isinstance(expr, LambdaExpr):
-                return expr.eval(env)
-            elif isinstance(expr, CallExpr):
-                operator = eval_expr(expr.operator)
-                operands = [eval_expr(arg) for arg in expr.operands]
-                return operator.apply(operands)
-            else:
-                raise TypeError
-
-        return eval_expr(self)
+        operator = self.operator.eval(env)
+        operands = [arg.eval(env) for arg in self.operands]
+        return operator.apply(operands)
 
     def __str__(self):
         function = str(self.operator)
@@ -296,6 +288,10 @@ class LambdaFunction(Value):
             raise TypeError("Cannot match parameters {} to arguments {}".format(
                 comma_separated(self.parameters), comma_separated(arguments)))
         "*** YOUR CODE HERE ***"
+        newEnv = self.parent.copy()
+        newEnv.update({key: value for key, value in zip(self.parameters, arguments)})
+
+        return Number(self.body.eval(newEnv))
 
     def __str__(self):
         definition = LambdaExpr(self.parameters, self.body)
