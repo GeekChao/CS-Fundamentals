@@ -49,21 +49,9 @@ CREATE TABLE sentences AS
         WHERE p1.parent = p2.parent and p1.child < p2.child
         ORDER BY p1.child
     )
-  WITH 
-    oneSibingSize(s1, s2, ss1) AS (
-      SELECT s1, s2, size
-        FROM siblings, size_of_dogs
-        WHERE s1 = name
-    ) 
-  WITH 
-    siblingsSize(s1, s2, ss1, ss2) AS (
-      SELECT s1, s2, ss1, size
-      FROM oneSibingSize, size_of_dogs
-      WHERE s2 = name
-    )
-  SELECT s1 || "and" || s2 || "are" || size || "siblings"
-    FROM siblingsSize
-    WHERE ss1 = ss2
+  SELECT s1 || " and " || s2 || " are " || a.size || " siblings"
+    FROM siblings, size_of_dogs AS a, size_of_dogs AS b
+    WHERE s1 = a.name AND s2 = b.name AND a.size = b.size;
 
 -- Ways to stack 4 dogs to a height of at least 170, ordered by total height
 CREATE TABLE stacks AS
@@ -76,4 +64,4 @@ CREATE TABLE stacks AS
   SELECT dogs_str, total_height
     FROM dogs_stacks
     WHERE total_height > 170 and n = 4
-    ORDER BY dogs_str
+    ORDER BY total_height;
