@@ -105,7 +105,7 @@ CREATE TABLE healthiest_meats AS
   SELECT m.meat, MIN(m.calories + p.calories)
     FROM main_course AS m, pies AS p
     GROUP BY m.meat
-    HAVING m.calories + p.calories < 3000;
+    HAVING MAX(m.calories + p.calories) < 3000;
 
 CREATE TABLE average_prices AS
   SELECT category, AVG(MSRP)
@@ -113,17 +113,13 @@ CREATE TABLE average_prices AS
     GROUP BY category;
 
 CREATE TABLE lowest_prices AS
-  SELECT store, name, MIN(price)
-    FROM products, inventory
-    WHERE name = item
-    GROUP BY name;
+ SELECT * FROM inventory GROUP BY item HAVING MIN(price);
 
 CREATE TABLE shopping_list AS
-  WITH 
-    category_lowest() AS (
+  WITH category_lowest(name, price) AS (
       SELECT name, MIN(MSRP / rating) AS price FROM products GROUP BY category
     )
   SELECT store, c.name FROM category_lowest AS c, lowest_prices AS l WHERE c.name = l.name;
 
 CREATE TABLE total_bandwidth AS
-  SELECT SUM(Mbs) FROM shopping_list AS sl, stores AS s WHERE s.store = sl.store;
+  SELECT SUM(s.Mbs) FROM shopping_list AS sl, stores AS s WHERE s.store = sl.store;
