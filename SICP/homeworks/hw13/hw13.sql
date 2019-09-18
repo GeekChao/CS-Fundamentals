@@ -86,7 +86,14 @@ CREATE TABLE stores AS
 -------------------------------------------------------------
 
 CREATE TABLE schedule AS
-  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+  WITH 
+    trips(arr, stops, cost, num) AS (
+      SELECT arrival, departure || ',' || arrival, price, 1 FROM flights WHERE departure = "SFO" UNION
+      SELECT arrival, t.stops || ',' || arrival, t.cost + price, t.num + 1
+        FROM trips AS t, flights
+        WHERE t.arr = departure AND num < 2
+    )
+  SELECT stops, cost FROM trips WHERE arr = "PDX" ORDER BY cost;
 
 CREATE TABLE number_of_options AS
   SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
