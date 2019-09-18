@@ -96,22 +96,34 @@ CREATE TABLE schedule AS
   SELECT stops, cost FROM trips WHERE arr = "PDX" ORDER BY cost;
 
 CREATE TABLE number_of_options AS
-  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+  SELECT COUNT(DISTINCT meat) AS count FROM main_course;
 
 CREATE TABLE calories AS
-  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+  SELECT COUNT(*) FROM main_course AS m, pies AS p WHERE m.calories + p.calories < 2500;
 
 CREATE TABLE healthiest_meats AS
-  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+  SELECT m.meat, MIN(m.calories + p.calories)
+    FROM main_course AS m, pies AS p
+    GROUP BY m.meat
+    HAVING m.calories + p.calories < 3000;
 
 CREATE TABLE average_prices AS
-  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+  SELECT category, AVG(MSRP)
+    FROM products
+    GROUP BY category;
 
 CREATE TABLE lowest_prices AS
-  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+  SELECT store, name, MIN(price)
+    FROM products, inventory
+    WHERE name = item
+    GROUP BY name;
 
 CREATE TABLE shopping_list AS
-  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+  WITH 
+    category_lowest() AS (
+      SELECT name, MIN(MSRP / rating) AS price FROM products GROUP BY category
+    )
+  SELECT store, c.name FROM category_lowest AS c, lowest_prices AS l WHERE c.name = l.name;
 
 CREATE TABLE total_bandwidth AS
-  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+  SELECT SUM(Mbs) FROM shopping_list AS sl, stores AS s WHERE s.store = sl.store;
