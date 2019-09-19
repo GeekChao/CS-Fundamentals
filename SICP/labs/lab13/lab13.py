@@ -38,8 +38,21 @@ def make_generators_generator(g):
     4
     5
     """
-    "*** YOUR CODE HERE ***"
+    i = 1
 
+    def gen():
+        try:
+            j = 1
+            while j <= i:
+                yield g()
+                j += 1
+        except StopIteration:
+            pass
+
+    while True:
+        yield gen
+        i += 1
+            
 def permutations(lst):
     """Generates all permutations of sequence LST. Each permutation is a
     list of the elements in LST in a different order.
@@ -58,4 +71,4 @@ def permutations(lst):
     if not lst:
         yield []
         return
-    "*** YOUR CODE HERE ***"
+    
