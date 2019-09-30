@@ -38,20 +38,16 @@ def make_generators_generator(g):
     4
     5
     """
-    i = 1
-
-    def gen():
+    def gen(i):
         try:
-            j = 1
-            while j <= i:
-                yield g()
-                j += 1
+            gen = g()
+            for _ in range(i):
+                yield next(gen)
         except StopIteration:
             pass
 
-    while True:
-        yield gen
-        i += 1
+    for i in range(1, len(list(g()))):
+        yield gen(i)
             
 def permutations(lst):
     """Generates all permutations of sequence LST. Each permutation is a
@@ -71,4 +67,7 @@ def permutations(lst):
     if not lst:
         yield []
         return
-    
+        
+    for old_lst in permutations(lst[1:]):
+        for i in range(len(lst)):
+            yield old_lst[:i] + [lst[0]] + old_lst[i:]
